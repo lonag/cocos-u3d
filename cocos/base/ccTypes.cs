@@ -27,8 +27,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-// using Microsoft.Xna.Framework.Graphics;
-// using Microsoft.Xna.Framework;
 
 namespace cocos2d
 {
@@ -59,13 +57,13 @@ namespace cocos2d
             b = inb;
         }
 
-        public Color XNAColor
-        {
-            get
-            {
-                return (new Color(r, g, b, 255));
-            }
-        }
+        // public Color XNAColor
+        // {
+        //     get
+        //     {
+        //         return (new Color(r, g, b, 255));
+        //     }
+        // }
 
         public ccColor3B copy()
         {

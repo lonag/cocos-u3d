@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
-using Microsoft.Xna.Framework;
+// using Microsoft.Xna.Framework;
 
 namespace cocos2d
 {
