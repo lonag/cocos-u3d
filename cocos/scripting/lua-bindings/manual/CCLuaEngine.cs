@@ -1,52 +1,8 @@
-/****************************************************************************
- Copyright (c) 2012      cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+namespace cocos2d {
+    public class LuaEngine {
+        LuaEngine* LuaEngine::_defaultEngine = nullptr;
 
- http://www.cocos2d-x.org
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-
-#include "extensions/GUI/CCControlExtension/CCControl.h"
-#include "scripting/lua-bindings/manual/cocos2d/LuaOpengl.h"
-#include "scripting/lua-bindings/manual/cocos2d/lua_cocos2dx_manual.hpp"
-#include "scripting/lua-bindings/manual/extension/lua_cocos2dx_extension_manual.h"
-#include "scripting/lua-bindings/manual/cocostudio/lua_cocos2dx_coco_studio_manual.hpp"
-#include "scripting/lua-bindings/manual/ui/lua_cocos2dx_ui_manual.hpp"
-#include "2d/CCMenuItem.h"
-#include "base/CCDirector.h"
-#include "base/CCEventCustom.h"
-
-#if _MSC_VER > 1800
-#pragma comment(lib,"lua51-2015.lib")
-#else
-#pragma comment(lib,"lua51.lib")
-#endif
-
-NS_CC_BEGIN
-
-LuaEngine* LuaEngine::_defaultEngine = nullptr;
-
-LuaEngine* LuaEngine::getInstance(void)
+public static LuaEngine getInstance(void)
 {
     if (!_defaultEngine)
     {
@@ -56,72 +12,72 @@ LuaEngine* LuaEngine::getInstance(void)
     return _defaultEngine;
 }
 
-LuaEngine::~LuaEngine(void)
-{
-    CC_SAFE_RELEASE(_stack);
-    _defaultEngine = nullptr;
-}
+// LuaEngine::~LuaEngine(void)
+// {
+//     CC_SAFE_RELEASE(_stack);
+//     _defaultEngine = nullptr;
+// }
 
-bool LuaEngine::init(void)
+public bool init(void)
 {
     _stack = LuaStack::create();
     _stack->retain();
     return true;
 }
 
-void LuaEngine::addSearchPath(const char* path)
+public void addSearchPath(const char* path)
 {
     _stack->addSearchPath(path);
 }
 
-void LuaEngine::addLuaLoader(lua_CFunction func)
+public void addLuaLoader(lua_CFunction func)
 {
     _stack->addLuaLoader(func);
 }
 
-void LuaEngine::removeScriptObjectByObject(Ref* pObj)
+public void removeScriptObjectByObject(Ref* pObj)
 {
     _stack->removeScriptObjectByObject(pObj);
     ScriptHandlerMgr::getInstance()->removeObjectAllHandlers(pObj);
 }
 
-void LuaEngine::removeScriptHandler(int nHandler)
+public void removeScriptHandler(int nHandler)
 {
     _stack->removeScriptHandler(nHandler);
 }
 
-int LuaEngine::executeString(const char *codes)
+public int executeString(const char *codes)
 {
     int ret = _stack->executeString(codes);
     _stack->clean();
     return ret;
 }
 
-int LuaEngine::executeScriptFile(const char* filename)
+public int executeScriptFile(const char* filename)
 {
     int ret = _stack->executeScriptFile(filename);
     _stack->clean();
     return ret;
 }
 
-int LuaEngine::executeGlobalFunction(const char* functionName)
+public int executeGlobalFunction(const char* functionName)
 {
     int ret = _stack->executeGlobalFunction(functionName);
     _stack->clean();
     return ret;
 }
 
-int LuaEngine::executeNodeEvent(Node* pNode, int nAction)
+public int executeNodeEvent(Node* pNode, int nAction)
 {
     return 0;
 }
 
-int LuaEngine::executeMenuItemEvent(MenuItem* pMenuItem)
+public int executeMenuItemEvent(MenuItem* pMenuItem)
 {
     return 0;
 }
 
-int LuaEngine::executeNotificationEvent(__NotificationCenter* pNotificationCenter, const char* pszName)
+public int executeNotificationEvent(__NotificationCenter* pNotificationCenter, const char* pszName)
 {
     int nHandler = pNotificationCenter->getObserverHandlerByName(pszName);
     if (!nHandler) return 0;
@@ -132,12 +88,12 @@ int LuaEngine::executeNotificationEvent(__NotificationCenter* pNotificationCente
     return ret;
 }
 
-int LuaEngine::executeCallFuncActionEvent(CallFunc* pAction, Ref* pTarget/* = NULL*/)
+public int executeCallFuncActionEvent(CallFunc* pAction, Ref* pTarget/* = NULL*/)
 {
     return 0;
 }
 
-int LuaEngine::executeSchedule(int nHandler, float dt, Node* pNode/* = NULL*/)
+public int executeSchedule(int nHandler, float dt, Node* pNode/* = NULL*/)
 {
     if (!nHandler) return 0;
     _stack->pushFloat(dt);
@@ -146,27 +102,27 @@ int LuaEngine::executeSchedule(int nHandler, float dt, Node* pNode/* = NULL*/)
     return ret;
 }
 
-int LuaEngine::executeLayerTouchEvent(Layer* pLayer, int eventType, Touch *pTouch)
+public int executeLayerTouchEvent(Layer* pLayer, int eventType, Touch *pTouch)
 {
     return 0;
 }
 
-int LuaEngine::executeLayerTouchesEvent(Layer* pLayer, int eventType, __Set *pTouches)
+public int executeLayerTouchesEvent(Layer* pLayer, int eventType, __Set *pTouches)
 {
     return 0;
 }
 
-int LuaEngine::executeLayerKeypadEvent(Layer* pLayer, int eventType)
+public int executeLayerKeypadEvent(Layer* pLayer, int eventType)
 {
     return 0;
 }
 
-int LuaEngine::executeAccelerometerEvent(Layer* pLayer, Acceleration* pAccelerationValue)
+public int executeAccelerometerEvent(Layer* pLayer, Acceleration* pAccelerationValue)
 {
     return 0;
 }
 
-int LuaEngine::executeEvent(int nHandler, const char* pEventName, Ref* pEventSource /* = NULL*/, const char* pEventSourceClassName /* = NULL*/)
+public int executeEvent(int nHandler, const char* pEventName, Ref* pEventSource /* = NULL*/, const char* pEventSourceClassName /* = NULL*/)
 {
     _stack->pushString(pEventName);
     if (pEventSource)
@@ -178,21 +134,21 @@ int LuaEngine::executeEvent(int nHandler, const char* pEventName, Ref* pEventSou
     return ret;
 }
 
-bool LuaEngine::handleAssert(const char *msg)
+public bool handleAssert(const char *msg)
 {
     bool ret = _stack->handleAssert(msg);
     _stack->clean();
     return ret;
 }
 
-int LuaEngine::reallocateScriptHandler(int nHandler)
+public int reallocateScriptHandler(int nHandler)
 {    
     int nRet = _stack->reallocateScriptHandler(nHandler);
     _stack->clean();
     return nRet;
 }
 
-bool LuaEngine::parseConfig(ConfigType type, const std::string& str)
+public bool parseConfig(ConfigType type, const std::string& str)
 {
     lua_getglobal(_stack->getLuaState(), "__onParseConfig");
     if (!lua_isfunction(_stack->getLuaState(), -1))
@@ -208,7 +164,7 @@ bool LuaEngine::parseConfig(ConfigType type, const std::string& str)
     return _stack->executeFunction(2);
 }
 
-int LuaEngine::sendEvent(ScriptEvent* evt)
+public int sendEvent(ScriptEvent* evt)
 {
     if (NULL == evt)
         return 0;
@@ -272,7 +228,7 @@ int LuaEngine::sendEvent(ScriptEvent* evt)
     return 0;
 }
 
-int LuaEngine::handleNodeEvent(void* data)
+public int handleNodeEvent(void* data)
 {
     if (NULL == data)
         return 0;
@@ -317,7 +273,7 @@ int LuaEngine::handleNodeEvent(void* data)
     return ret;
 }
 
-int LuaEngine::handleMenuClickedEvent(void* data)
+public int handleMenuClickedEvent(void* data)
 {
     if (NULL == data)
         return 0;
@@ -339,7 +295,7 @@ int LuaEngine::handleMenuClickedEvent(void* data)
     return ret;
 }
 
-int LuaEngine::handleCallFuncActionEvent(void* data)
+public int handleCallFuncActionEvent(void* data)
 {
     if (NULL == data)
         return 0;
@@ -363,7 +319,7 @@ int LuaEngine::handleCallFuncActionEvent(void* data)
     return ret;
 }
 
-int LuaEngine::handleScheduler(void* data)
+public int handleScheduler(void* data)
 {
     if (NULL == data)
         return 0;
@@ -377,7 +333,7 @@ int LuaEngine::handleScheduler(void* data)
     return ret;
 }
 
-int LuaEngine::handleKeypadEvent(void* data)
+public int handleKeypadEvent(void* data)
 {
     if (NULL == data)
         return 0;
@@ -396,13 +352,13 @@ int LuaEngine::handleKeypadEvent(void* data)
     switch(action)
     {
         case EventKeyboard::KeyCode::KEY_ESCAPE:
-			_stack->pushString("backClicked");
-			break;
-		case EventKeyboard::KeyCode::KEY_MENU:
+            _stack->pushString("backClicked");
+            break;
+        case EventKeyboard::KeyCode::KEY_MENU:
             _stack->pushString("menuClicked");
-			break;
-		default:
-			break;
+            break;
+        default:
+            break;
     }
 
     int ret = _stack->executeFunctionByHandler(handler, 1);
@@ -410,7 +366,7 @@ int LuaEngine::handleKeypadEvent(void* data)
     return ret;
 }
 
-int LuaEngine::handleAccelerometerEvent(void* data)
+public int handleAccelerometerEvent(void* data)
 {
     if (NULL == data)
         return 0;
@@ -433,7 +389,7 @@ int LuaEngine::handleAccelerometerEvent(void* data)
     return ret;
 }
 
-int LuaEngine::handleCommonEvent(void* data)
+public int handleCommonEvent(void* data)
 {
     if (NULL == data)
         return 0;
@@ -459,7 +415,7 @@ int LuaEngine::handleCommonEvent(void* data)
     return ret;
 }
 
-int LuaEngine::handleTouchEvent(void* data)
+public int handleTouchEvent(void* data)
 {
     if (NULL == data)
         return 0;
@@ -508,7 +464,7 @@ int LuaEngine::handleTouchEvent(void* data)
     return ret;
 }
 
-int LuaEngine::handleTouchesEvent(void* data)
+public int handleTouchesEvent(void* data)
 {
     if (NULL == data)
         return 0;
@@ -566,7 +522,7 @@ int LuaEngine::handleTouchesEvent(void* data)
     return ret;
 }
 
-int LuaEngine::handlerControlEvent(void* data)
+public int handlerControlEvent(void* data)
 {
     if ( NULL == data )
         return 0;
@@ -600,7 +556,7 @@ int LuaEngine::handlerControlEvent(void* data)
     return ret;    
 }
 
-int LuaEngine::handleEventAcc(void* data)
+public int handleEventAcc(void* data)
 {
     if (nullptr == data)
         return 0;
@@ -627,7 +583,7 @@ int LuaEngine::handleEventAcc(void* data)
     return ret;
 }
 
-int LuaEngine::handleEventKeyboard(ScriptHandlerMgr::HandlerType type, void* data)
+public int handleEventKeyboard(ScriptHandlerMgr::HandlerType type, void* data)
 {
     if (nullptr == data)
         return 0;
@@ -650,7 +606,7 @@ int LuaEngine::handleEventKeyboard(ScriptHandlerMgr::HandlerType type, void* dat
     return ret;
 }
 
-int LuaEngine::handleEventTouch(ScriptHandlerMgr::HandlerType type, void* data)
+public int handleEventTouch(ScriptHandlerMgr::HandlerType type, void* data)
 {
     if (nullptr == data)
         return 0;
@@ -680,7 +636,7 @@ int LuaEngine::handleEventTouch(ScriptHandlerMgr::HandlerType type, void* data)
     return ret;
 }
 
-int LuaEngine::handleEventTouches(ScriptHandlerMgr::HandlerType type,void* data)
+public int handleEventTouches(ScriptHandlerMgr::HandlerType type,void* data)
 {
     if (nullptr == data)
         return 0;
@@ -717,7 +673,7 @@ int LuaEngine::handleEventTouches(ScriptHandlerMgr::HandlerType type,void* data)
     return ret;
 }
 
-int LuaEngine::handleEventMouse(ScriptHandlerMgr::HandlerType type, void* data)
+public int handleEventMouse(ScriptHandlerMgr::HandlerType type, void* data)
 {
     if (nullptr == data)
         return 0;
@@ -742,7 +698,7 @@ int LuaEngine::handleEventMouse(ScriptHandlerMgr::HandlerType type, void* data)
     return ret;
 }
 
-int LuaEngine::handleEvenCustom(void* data)
+public int handleEvenCustom(void* data)
 {
     if (nullptr == data)
         return 0;
@@ -765,7 +721,7 @@ int LuaEngine::handleEvenCustom(void* data)
     return ret;
 }
 
-int LuaEngine::handleEvent(ScriptHandlerMgr::HandlerType type,void* data)
+public int handleEvent(ScriptHandlerMgr::HandlerType type,void* data)
 {
     switch (type)
     {
@@ -838,7 +794,7 @@ int LuaEngine::handleEvent(ScriptHandlerMgr::HandlerType type,void* data)
     return 0;
 }
 
-int LuaEngine::handleEvent(ScriptHandlerMgr::HandlerType type, void* data, int numResults, const std::function<void(lua_State*,int)>& func)
+public int handleEvent(ScriptHandlerMgr::HandlerType type, void* data, int numResults, const std::function<void(lua_State*,int)>& func)
 {
     switch (type)
     {
@@ -856,7 +812,7 @@ int LuaEngine::handleEvent(ScriptHandlerMgr::HandlerType type, void* data, int n
     return 0;
 }
 
-int LuaEngine::handleTableViewEvent(ScriptHandlerMgr::HandlerType type,void* data)
+public int handleTableViewEvent(ScriptHandlerMgr::HandlerType type,void* data)
 {
     if (nullptr == data)
         return 0;
@@ -907,7 +863,7 @@ int LuaEngine::handleTableViewEvent(ScriptHandlerMgr::HandlerType type,void* dat
 
 }
 
-int LuaEngine::handleTableViewEvent(ScriptHandlerMgr::HandlerType handlerType,void* data, int numResults, const std::function<void(lua_State*,int)>& func)
+public int handleTableViewEvent(ScriptHandlerMgr::HandlerType handlerType,void* data, int numResults, const std::function<void(lua_State*,int)>& func)
 {
     if (nullptr == data || numResults <= 0)
         return 0;
@@ -956,7 +912,7 @@ int LuaEngine::handleTableViewEvent(ScriptHandlerMgr::HandlerType handlerType,vo
     return ret;
 }
 
-int LuaEngine::handleAssetsManagerEvent(ScriptHandlerMgr::HandlerType type,void* data)
+public int handleAssetsManagerEvent(ScriptHandlerMgr::HandlerType type,void* data)
 {
     if (nullptr == data)
         return 0;
@@ -996,7 +952,7 @@ int LuaEngine::handleAssetsManagerEvent(ScriptHandlerMgr::HandlerType type,void*
     return ret;
 }
 
-int LuaEngine::handleArmatureWrapper(ScriptHandlerMgr::HandlerType type,void* data)
+public int handleArmatureWrapper(ScriptHandlerMgr::HandlerType type,void* data)
 {
     if (nullptr == data)
         return 0;
@@ -1050,9 +1006,9 @@ int LuaEngine::handleArmatureWrapper(ScriptHandlerMgr::HandlerType type,void* da
     return 0;
 }
 
-int LuaEngine::reload(const char* moduleFileName)
+public int reload(const char* moduleFileName)
 {
     return _stack->reload(moduleFileName);
 }
-
-NS_CC_END
+    }
+}
