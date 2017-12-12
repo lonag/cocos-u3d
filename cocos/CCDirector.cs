@@ -1,29 +1,3 @@
-/****************************************************************************
-Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2008-2010 Ricardo Quesada
-Copyright (c) 2009      Valentin Milea
-Copyright (c) 2011      Zynga Inc.
-Copyright (c) 2011-2012 openxlive.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -338,12 +312,6 @@ namespace cocos2d
         /// </summary>
         List<CCScene> m_pobScenesStack = new List<CCScene>();
 
-        /* projection used */
-        ccDirectorProjection m_eProjection;
-
-        /* window size in points */
-        CCSize m_obWinSizeInPoints;
-
         /* window size in pixels */
         CCSize m_obWinSizeInPixels;
 
@@ -355,16 +323,6 @@ namespace cocos2d
 
         /* This object will be visited after the scene. Useful to hook a notification node */
         CCNode m_pNotificationNode;
-
-        /* Projection protocol delegate */
-        //CCProjectionProtocol *m_pProjectionDelegate;
-
-        /* The device orientation */
-        ccDeviceOrientation m_eDeviceOrientation;
-        /* contentScaleFactor could be simulated */
-        bool m_bIsContentScaleSupported;
-
-        bool m_bRetinaDisplay;
 
         #endregion
 
@@ -463,11 +421,6 @@ namespace cocos2d
             }
 
             animationInterval = m_dOldAnimationInterval;
-
-            //if (CCTime.gettimeofdayCocos2d(m_pLastUpdate, NULL) != 0)
-            //{
-            //    //CCLOG("cocos2d: Director: Error in gettimeofday");
-            //}
 
             m_bPaused = false;
         }
