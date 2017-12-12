@@ -23,25 +23,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-
-#include "extensions/GUI/CCControlExtension/CCControl.h"
-#include "scripting/lua-bindings/manual/cocos2d/LuaOpengl.h"
-#include "scripting/lua-bindings/manual/cocos2d/lua_cocos2dx_manual.hpp"
-#include "scripting/lua-bindings/manual/extension/lua_cocos2dx_extension_manual.h"
-#include "scripting/lua-bindings/manual/cocostudio/lua_cocos2dx_coco_studio_manual.hpp"
-#include "scripting/lua-bindings/manual/ui/lua_cocos2dx_ui_manual.hpp"
-#include "2d/CCMenuItem.h"
-#include "base/CCDirector.h"
-#include "base/CCEventCustom.h"
-
-#if _MSC_VER > 1800
-#pragma comment(lib,"lua51-2015.lib")
-#else
-#pragma comment(lib,"lua51.lib")
-#endif
-
 NS_CC_BEGIN
 
 LuaEngine* LuaEngine::_defaultEngine = nullptr;
