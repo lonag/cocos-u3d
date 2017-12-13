@@ -25,8 +25,8 @@ THE SOFTWARE.
 
 using System;
 using System.Diagnostics;
-// using Microsoft.Xna.Framework.Graphics;
-// using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 namespace cocos2d
 {
     /// <summary>
@@ -55,15 +55,15 @@ namespace cocos2d
     * CCSprite can be created with an image, or with a sub-rectangle of an image.
     *
     * If the parent or any of its ancestors is a CCSpriteBatchNode then the following features/limitations are valid
-    *	- Features when the parent is a CCBatchNode:
-    *		- MUCH faster rendering, specially if the CCSpriteBatchNode has many children. All the children will be drawn in a single batch.
+    *   - Features when the parent is a CCBatchNode:
+    *       - MUCH faster rendering, specially if the CCSpriteBatchNode has many children. All the children will be drawn in a single batch.
     *
-    *	- Limitations
-    *		- Camera is not supported yet (eg: CCOrbitCamera action doesn't work)
-    *		- GridBase actions are not supported (eg: CCLens, CCRipple, CCTwirl)
-    *		- The Alias/Antialias property belongs to CCSpriteBatchNode, so you can't individually set the aliased property.
-    *		- The Blending function property belongs to CCSpriteBatchNode, so you can't individually set the blending function property.
-    *		- Parallax scroller is not supported, but can be simulated with a "proxy" sprite.
+    *   - Limitations
+    *       - Camera is not supported yet (eg: CCOrbitCamera action doesn't work)
+    *       - GridBase actions are not supported (eg: CCLens, CCRipple, CCTwirl)
+    *       - The Alias/Antialias property belongs to CCSpriteBatchNode, so you can't individually set the aliased property.
+    *       - The Blending function property belongs to CCSpriteBatchNode, so you can't individually set the blending function property.
+    *       - Parallax scroller is not supported, but can be simulated with a "proxy" sprite.
     *
     *  If the parent is an standard CCNode, then CCSprite behaves like any other CCNode:
     *    - It supports blending functions
@@ -458,74 +458,6 @@ namespace cocos2d
         public override void draw()
         {
             base.draw();
-
-            Debug.Assert(!m_bUsesBatchNode);
-
-            CCApplication app = CCApplication.sharedApplication();
-            CCSize size = CCDirector.sharedDirector().getWinSize();
-
-            bool newBlend = m_sBlendFunc.src != ccMacros.CC_BLEND_SRC || m_sBlendFunc.dst != ccMacros.CC_BLEND_DST;
-            BlendState origin = app.GraphicsDevice.BlendState;
-            if (newBlend)
-            {
-                BlendState bs = new BlendState();
-
-                bs.ColorSourceBlend = OGLES.GetXNABlend(m_sBlendFunc.src);
-                bs.AlphaSourceBlend = OGLES.GetXNABlend(m_sBlendFunc.src); 
-                bs.ColorDestinationBlend = OGLES.GetXNABlend(m_sBlendFunc.dst);
-                bs.AlphaDestinationBlend = OGLES.GetXNABlend(m_sBlendFunc.dst);
-
-                app.GraphicsDevice.BlendState = bs;
-                //glBlendFunc(m_sBlendFunc.src, m_sBlendFunc.dst);
-            }
-
-            if (this.Texture != null)
-            {
-                app.basicEffect.Texture = this.Texture.getTexture2D();
-                app.basicEffect.TextureEnabled = true;
-                if (!newBlend) // @@ TotallyEvil
-                {
-                   // app.GraphicsDevice.BlendState = BlendState.AlphaBlend;
-                }
-                app.basicEffect.Alpha = (float)this.Opacity / 255.0f;
-                app.basicEffect.VertexColorEnabled = true;
-            }
-
-            VertexPositionColorTexture[] vertices = this.m_sQuad.getVertices(ccDirectorProjection.CCDirectorProjection3D);
-            short[] indexes = this.m_sQuad.getIndexes(ccDirectorProjection.CCDirectorProjection3D);
-
-            //VertexDeclaration vertexDeclaration = new VertexDeclaration(new VertexElement[]
-            //    {
-            //        new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
-            //        new VertexElement(12, VertexElementFormat.Vector3, VertexElementUsage.Color, 0),
-            //        new VertexElement(24, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0)
-            //    });
-
-            foreach (var pass in app.basicEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-
-                app.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionColorTexture>(
-                    PrimitiveType.TriangleList,
-                    vertices, 0, 4,
-                    indexes, 0, 2);
-            }
-
-            app.basicEffect.VertexColorEnabled = false;
-
-            if (newBlend)
-            {
-                BlendState bs = new BlendState();
-
-                bs.ColorSourceBlend = OGLES.GetXNABlend(ccMacros.CC_BLEND_SRC);
-                bs.AlphaSourceBlend = OGLES.GetXNABlend(ccMacros.CC_BLEND_SRC);
-                bs.ColorDestinationBlend = OGLES.GetXNABlend(ccMacros.CC_BLEND_DST);
-                bs.AlphaDestinationBlend = OGLES.GetXNABlend(ccMacros.CC_BLEND_DST);
-
-                app.GraphicsDevice.BlendState = bs;
-
-                //glBlendFunc(m_sBlendFunc.src, m_sBlendFunc.dst);
-            }
         }
 
         #region add,remove child
@@ -1166,20 +1098,7 @@ namespace cocos2d
         /// </summary>
         public void useSelfRender()
         {
-            m_uAtlasIndex = ccMacros.CCSpriteIndexNotInitialized;
-            m_bUseBatchNode = false;
-            m_pobTextureAtlas = null;
-            m_pobBatchNode = null;
-            m_bDirty = m_bRecursiveDirty = false;
 
-            float x1 = 0 + m_obOffsetPositionInPixels.x;
-            float y1 = 0 + m_obOffsetPositionInPixels.y;
-            float x2 = x1 + m_obRectInPixels.size.width;
-            float y2 = y1 + m_obRectInPixels.size.height;
-            m_sQuad.bl.vertices = ccTypes.vertex3(x1, y1, 0);
-            m_sQuad.br.vertices = ccTypes.vertex3(x2, y1, 0);
-            m_sQuad.tl.vertices = ccTypes.vertex3(x1, y2, 0);
-            m_sQuad.tr.vertices = ccTypes.vertex3(x2, y2, 0);
         }
 
         /// <summary>
@@ -1197,49 +1116,7 @@ namespace cocos2d
         /// </summary>
         public void setTextureRectInPixels(CCRect rect, bool rotated, CCSize size)
         {
-            m_obRectInPixels = rect;
-            m_obRect = ccMacros.CC_RECT_PIXELS_TO_POINTS(rect);
-            m_bRectRotated = rotated;
-
-            contentSizeInPixels = size;
-            updateTextureCoords(m_obRectInPixels);
-
-            CCPoint relativeOffsetInPixels = m_obUnflippedOffsetPositionFromCenter;
-
-            if (m_bFlipX)
-            {
-                relativeOffsetInPixels.x = -relativeOffsetInPixels.x;
-            }
-            if (m_bFlipY)
-            {
-                relativeOffsetInPixels.y = -relativeOffsetInPixels.y;
-            }
-
-            m_obOffsetPositionInPixels.x = relativeOffsetInPixels.x + (m_tContentSizeInPixels.width - m_obRectInPixels.size.width) / 2;
-            m_obOffsetPositionInPixels.y = relativeOffsetInPixels.y + (m_tContentSizeInPixels.height - m_obRectInPixels.size.height) / 2;
-
-            // rendering using batch node
-            if (m_bUseBatchNode)
-            {
-                // update dirty_, don't update recursiveDirty_
-                m_bDirty = true;
-            }
-            else
-            {
-                // self rendering
-
-                // Atlas: Vertex
-                float x1 = 0 + m_obOffsetPositionInPixels.x;
-                float y1 = 0 + m_obOffsetPositionInPixels.y;
-                float x2 = x1 + m_obRectInPixels.size.width;
-                float y2 = y1 + m_obRectInPixels.size.height;
-
-                // Don't update Z.
-                m_sQuad.bl.vertices = ccTypes.vertex3(x1, y1, 0);
-                m_sQuad.br.vertices = ccTypes.vertex3(x2, y1, 0);
-                m_sQuad.tl.vertices = ccTypes.vertex3(x1, y2, 0);
-                m_sQuad.tr.vertices = ccTypes.vertex3(x2, y2, 0);
-            }
+            
         }
 
         /// <summary>
@@ -1322,103 +1199,12 @@ namespace cocos2d
 
         protected void updateTextureCoords(CCRect rect)
         {
-            CCTexture2D tex = m_bUsesBatchNode ? m_pobTextureAtlas.Texture : m_pobTexture;
-            if (tex == null)
-            {
-                return;
-            }
-
-            float atlasWidth = (float)tex.PixelsWide;
-            float atlasHeight = (float)tex.PixelsHigh;
-
-            float left, right, top, bottom;
-
-            if (m_bRectRotated)
-            {
-#if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
-		left	= (2*rect.origin.x+1)/(2*atlasWidth);
-		right	= left+(rect.size.height*2-2)/(2*atlasWidth);
-		top		= (2*rect.origin.y+1)/(2*atlasHeight);
-		bottom	= top+(rect.size.width*2-2)/(2*atlasHeight);
-#else
-                left = rect.origin.x / atlasWidth;
-                right = left + (rect.size.height / atlasWidth);
-                top = rect.origin.y / atlasHeight;
-                bottom = top + (rect.size.width / atlasHeight);
-#endif // CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
-
-                if (m_bFlipX)
-                {
-                    ccMacros.CC_SWAP<float>(ref top, ref bottom);
-                }
-
-                if (m_bFlipY)
-                {
-                    ccMacros.CC_SWAP<float>(ref left, ref right);
-                }
-
-                m_sQuad.bl.texCoords.u = left;
-                m_sQuad.bl.texCoords.v = top;
-                m_sQuad.br.texCoords.u = left;
-                m_sQuad.br.texCoords.v = bottom;
-                m_sQuad.tl.texCoords.u = right;
-                m_sQuad.tl.texCoords.v = top;
-                m_sQuad.tr.texCoords.u = right;
-                m_sQuad.tr.texCoords.v = bottom;
-            }
-            else
-            {
-#if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
-		left	= (2*rect.origin.x+1)/(2*atlasWidth);
-		right	= left + (rect.size.width*2-2)/(2*atlasWidth);
-		top		= (2*rect.origin.y+1)/(2*atlasHeight);
-		bottom	= top + (rect.size.height*2-2)/(2*atlasHeight);
-#else
-                left = rect.origin.x / atlasWidth;
-                right = left + rect.size.width / atlasWidth;
-                top = rect.origin.y / atlasHeight;
-                bottom = top + rect.size.height / atlasHeight;
-#endif // ! CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
-
-                if (m_bFlipX)
-                {
-                    ccMacros.CC_SWAP<float>(ref left, ref right);
-                }
-
-                if (m_bFlipY)
-                {
-                    ccMacros.CC_SWAP<float>(ref top, ref bottom);
-                }
-
-                m_sQuad.bl.texCoords.u = left;
-                m_sQuad.bl.texCoords.v = bottom;
-                m_sQuad.br.texCoords.u = right;
-                m_sQuad.br.texCoords.v = bottom;
-                m_sQuad.tl.texCoords.u = left;
-                m_sQuad.tl.texCoords.v = top;
-                m_sQuad.tr.texCoords.u = right;
-                m_sQuad.tr.texCoords.v = top;
-            }
+            
         }
 
         protected void updateBlendFunc()
         {
-            // CCSprite: updateBlendFunc doesn't work when the sprite is rendered using a CCSpriteSheet
-            Debug.Assert(m_bUsesBatchNode != null);
-
-            // it's possible to have an untextured sprite
-            if (m_pobTexture == null || !m_pobTexture.HasPremultipliedAlpha)
-            {
-                m_sBlendFunc.src = OGLES.GL_SRC_ALPHA;
-                m_sBlendFunc.dst = OGLES.GL_ONE_MINUS_SRC_ALPHA;
-                IsOpacityModifyRGB = false;
-            }
-            else
-            {
-                m_sBlendFunc.src = ccMacros.CC_BLEND_SRC;
-                m_sBlendFunc.dst = ccMacros.CC_BLEND_DST;
-                IsOpacityModifyRGB = true;
-            }
+            
         }
 
         protected void getTransformValues(transformValues_ tv)

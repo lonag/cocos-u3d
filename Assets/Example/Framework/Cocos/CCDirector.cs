@@ -32,9 +32,6 @@ namespace cocos2d
             //scene
             m_dOldAnimationInterval = m_dAnimationInterval = 1.0 / kDefaultFPS;
 
-            // Set default projection (3D)
-            m_eProjection = ccDirectorProjection.kCCDirectorProjectionDefault;
-
             // projection delegate if "Custom" projection is used
             //m_pProjectionDelegate = NULL;
 
