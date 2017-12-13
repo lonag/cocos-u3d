@@ -23,48 +23,48 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-namespace {
-    int get_string_for_print(IntPtr   * L, std::string* out)
-    {
-        int n = lua_gettop(L);  /* number of arguments */
-        int i;
+// namespace {
+//     int get_string_for_print(IntPtr   * L, std::string* out)
+//     {
+//         int n = lua_gettop(L);  /* number of arguments */
+//         int i;
 
-        lua_getglobal(L, "tostring");
-        for (i=1; i<=n; i++) {
-            const char *s;
-            lua_pushvalue(L, -1);  /* function to be called */
-            lua_pushvalue(L, i);   /* value to print */
-            lua_call(L, 1, 1);
-            size_t sz;
-            s = lua_tolstring(L, -1, &sz);  /* get result */
-            if (s == NULL)
-                return luaL_error(L, LUA_QL("tostring") " must return a string to "
-                                  LUA_QL("print"));
-            if (i>1) out->append("\t");
-            out->append(s, sz);
-            lua_pop(L, 1);  /* pop result */
-        }
-        return 0;
-    }
+//         lua_getglobal(L, "tostring");
+//         for (i=1; i<=n; i++) {
+//             const char *s;
+//             lua_pushvalue(L, -1);  /* function to be called */
+//             lua_pushvalue(L, i);   /* value to print */
+//             lua_call(L, 1, 1);
+//             size_t sz;
+//             s = lua_tolstring(L, -1, &sz);  /* get result */
+//             if (s == NULL)
+//                 return luaL_error(L, LUA_QL("tostring") " must return a string to "
+//                                   LUA_QL("print"));
+//             if (i>1) out.append("\t");
+//             out.append(s, sz);
+//             lua_pop(L, 1);  /* pop result */
+//         }
+//         return 0;
+//     }
 
-    int lua_print(IntPtr   * L)
-    {
-        std::string t;
-        get_string_for_print(L, &t);
-        CCLOG("[LUA-print] %s", t.c_str());
+//     int lua_print(IntPtr   * L)
+//     {
+//         std::string t;
+//         get_string_for_print(L, &t);
+//         Log("[LUA-print] %s", t.c_str());
 
-        return 0;
-    }
+//         return 0;
+//     }
 
-    int lua_release_print(IntPtr   * L)
-    {
-        std::string t;
-        get_string_for_print(L, &t);
-        log("[LUA-print] %s", t.c_str());
+//     int lua_release_print(IntPtr   * L)
+//     {
+//         std::string t;
+//         get_string_for_print(L, &t);
+//         log("[LUA-print] %s", t.c_str());
 
-        return 0;
-    }
-}
+//         return 0;
+//     }
+// }
 
 namespace cocos2d
 
@@ -79,17 +79,17 @@ namespace cocos2d
 class LuaStack {
     public static LuaStack create(void)
     {
-        LuaStack *stack = new  LuaStack();
+        LuaStack stack = new  LuaStack();
         stack.init();
-        // stack->autorelease();
+        // stack.autorelease();
         return stack;
     }
 
     public static LuaStack attach(IntPtr L)
     {
-        LuaStack *stack = new (std::nothrow) LuaStack();
-        stack->initWithLuaState(L);
-        stack->autorelease();
+        LuaStack stack = new LuaStack();
+        stack.initWithLuaState(L);
+        stack.autorelease();
         return stack;
     }
 
@@ -184,7 +184,7 @@ class LuaStack {
 
     public void removeScriptObjectByObject(Ref* pObj)
     {
-        toluafix_remove_ccobject_by_refid(_state, pObj->_luaID);
+        toluafix_remove_ccobject_by_refid(_state, pObj._luaID);
     }
     public void removeScriptHandler(int nHandler)
     {
@@ -228,21 +228,21 @@ class LuaStack {
         // 2. check .luac suffix
         //
         std::string tmpfilename = buf + NOT_BYTECODE_FILE_EXT;
-        if (utils->isFileExist(tmpfilename))
+        if (utils.isFileExist(tmpfilename))
         {
             buf = tmpfilename;
         }
         else
         {
             tmpfilename = buf + BYTECODE_FILE_EXT;
-            if (utils->isFileExist(tmpfilename))
+            if (utils.isFileExist(tmpfilename))
             {
                 buf = tmpfilename;
             }
         }
 
-        std::string fullPath = utils->fullPathForFilename(buf);
-        Data data = utils->getDataFromFile(fullPath);
+        std::string fullPath = utils.fullPathForFilename(buf);
+        Data data = utils.getDataFromFile(fullPath);
         int rn = 0;
         if (!data.isNull())
         {
@@ -259,7 +259,7 @@ class LuaStack {
         lua_getglobal(_state, functionName);       /* query function by name, stack: function */
         if (!lua_isfunction(_state, -1))
         {
-            CCLOG("[LUA ERROR] name '%s' does not represent a Lua function", functionName);
+            Log("[LUA ERROR] name '%s' does not represent a Lua function", functionName);
             lua_pop(_state, 1);
             return 0;
         }
@@ -308,7 +308,7 @@ class LuaStack {
 
     public void pushObject(Ref* objectValue, const char* typeName)
     {
-        toluafix_pushusertype_ccobject(_state, objectValue->_ID, &objectValue->_luaID, objectValue, typeName);
+        toluafix_pushusertype_ccobject(_state, objectValue._ID, &objectValue._luaID, objectValue, typeName);
     }
 
     public void pushLuaValue(const LuaValue& value)
@@ -349,8 +349,8 @@ class LuaStack {
         lua_newtable(_state);                                              /* L: table */
         for (LuaValueDictIterator it = dict.begin(); it != dict.end(); ++it)
         {
-            lua_pushstring(_state, it->first.c_str());                     /* L: table key */
-            pushLuaValue(it->second);                                     /* L: table key value */
+            lua_pushstring(_state, it.first.c_str());                     /* L: table key */
+            pushLuaValue(it.second);                                     /* L: table key value */
             lua_rawset(_state, -3);                     /* table.key = value, L: table */
         }
     }
@@ -372,7 +372,7 @@ class LuaStack {
         toluafix_get_function_by_refid(_state, nHandler);                  /* L: ... func */
         if (!lua_isfunction(_state, -1))
         {
-            CCLOG("[LUA ERROR] function refid '%d' does not reference a Lua function", nHandler);
+            Log("[LUA ERROR] function refid '%d' does not reference a Lua function", nHandler);
             lua_pop(_state, 1);
             return false;
         }
@@ -384,7 +384,7 @@ class LuaStack {
         int functionIndex = -(numArgs + 1);
         if (!lua_isfunction(_state, functionIndex))
         {
-            CCLOG("value at stack [%d] is not function", functionIndex);
+            Log("value at stack [%d] is not function", functionIndex);
             lua_pop(_state, numArgs + 1); // remove function and arguments
             return 0;
         }
@@ -409,7 +409,7 @@ class LuaStack {
         {
             if (traceback == 0)
             {
-                CCLOG("[LUA ERROR] %s", lua_tostring(_state, - 1));        /* L: ... error */
+                Log("[LUA ERROR] %s", lua_tostring(_state, - 1));        /* L: ... error */
                 lua_pop(_state, 1); // remove error message from stack
             }
             else                                                            /* L: ... G error */
@@ -476,7 +476,7 @@ class LuaStack {
         toluafix_get_function_by_refid(_state,nNewHandle);
         if (!lua_isfunction(_state, -1))
         {
-            CCLOG("Error!");
+            Log("Error!");
         }
         lua_settop(_state, 0);
     */
@@ -496,7 +496,7 @@ class LuaStack {
             int functionIndex = -(numArgs + 1);
             if (!lua_isfunction(_state, functionIndex))
             {
-                CCLOG("value at stack [%d] is not function", functionIndex);
+                Log("value at stack [%d] is not function", functionIndex);
                 lua_pop(_state, numArgs + 1); // remove function and arguments
                 lua_settop(_state,top);
                 return 0;
@@ -522,7 +522,7 @@ class LuaStack {
             {
                 if (traceback == 0)
                 {
-                    CCLOG("[LUA ERROR] %s", lua_tostring(_state, - 1));        /* L: ... error */
+                    Log("[LUA ERROR] %s", lua_tostring(_state, - 1));        /* L: ... error */
                     lua_pop(_state, 1); // remove error message from stack
                 }
                 else                                                            /* L: ... G error */
@@ -588,7 +588,7 @@ class LuaStack {
 
             if (!lua_isfunction(_state, functionIndex))
             {
-                CCLOG("value at stack [%d] is not function", functionIndex);
+                Log("value at stack [%d] is not function", functionIndex);
                 lua_pop(_state, numArgs + 1); // remove function and arguments
                 return 0;
             }
@@ -614,7 +614,7 @@ class LuaStack {
             {
                 if (traceCallback == 0)
                 {
-                    CCLOG("[LUA ERROR] %s", lua_tostring(_state, - 1));        /* L: ... error */
+                    Log("[LUA ERROR] %s", lua_tostring(_state, - 1));        /* L: ... error */
                     lua_pop(_state, 1);                                        // remove error message from stack
                 }
                 else                                                           /* L: ... G error */
@@ -647,7 +647,7 @@ class LuaStack {
     {
         if (nullptr == moduleFileName || strlen(moduleFileName) == 0)
         {
-            CCLOG("moudulFileName is null");
+            Log("moudulFileName is null");
             return 1;
         }
 
@@ -718,34 +718,34 @@ class LuaStack {
     public int luaLoadChunksFromZIP(IntPtr *L)
     {
         if (lua_gettop(L) < 1) {
-            CCLOG("luaLoadChunksFromZIP() - invalid arguments");
+            Log("luaLoadChunksFromZIP() - invalid arguments");
             return 0;
         }
 
         const char *zipFilename = lua_tostring(L, -1);
         lua_settop(L, 0);
         FileUtils *utils = FileUtils::getInstance();
-        std::string zipFilePath = utils->fullPathForFilename(zipFilename);
+        std::string zipFilePath = utils.fullPathForFilename(zipFilename);
 
         LuaStack *stack = this;
 
         do {
             void *buffer = nullptr;
             ZipFile *zip = nullptr;
-            Data zipFileData(utils->getDataFromFile(zipFilePath));
+            Data zipFileData(utils.getDataFromFile(zipFilePath));
             unsigned char* bytes = zipFileData.getBytes();
             ssize_t size = zipFileData.getSize();
 
-            bool isXXTEA = stack && stack->_xxteaEnabled && size >= stack->_xxteaSignLen
-                && memcmp(stack->_xxteaSign, bytes, stack->_xxteaSignLen) == 0;
+            bool isXXTEA = stack && stack._xxteaEnabled && size >= stack._xxteaSignLen
+                && memcmp(stack._xxteaSign, bytes, stack._xxteaSignLen) == 0;
 
 
             if (isXXTEA) { // decrypt XXTEA
                 xxtea_long len = 0;
-                buffer = xxtea_decrypt(bytes + stack->_xxteaSignLen,
-                                       (xxtea_long)size - (xxtea_long)stack->_xxteaSignLen,
-                                       (unsigned char*)stack->_xxteaKey,
-                                       (xxtea_long)stack->_xxteaKeyLen,
+                buffer = xxtea_decrypt(bytes + stack._xxteaSignLen,
+                                       (xxtea_long)size - (xxtea_long)stack._xxteaSignLen,
+                                       (unsigned char*)stack._xxteaKey,
+                                       (xxtea_long)stack._xxteaKeyLen,
                                        &len);
                 zip = ZipFile::createWithBuffer(buffer, len);
             } else {
@@ -755,15 +755,15 @@ class LuaStack {
             }
 
             if (zip) {
-                CCLOG("lua_loadChunksFromZIP() - load zip file: %s%s", zipFilePath.c_str(), isXXTEA ? "*" : "");
+                Log("lua_loadChunksFromZIP() - load zip file: %s%s", zipFilePath.c_str(), isXXTEA ? "*" : "");
                 lua_getglobal(L, "package");
                 lua_getfield(L, -1, "preload");
 
                 int count = 0;
-                std::string filename = zip->getFirstFilename();
+                std::string filename = zip.getFirstFilename();
                 while (filename.length()) {
                     ssize_t bufferSize = 0;
-                    unsigned char *zbuffer = zip->getFileData(filename.c_str(), &bufferSize);
+                    unsigned char *zbuffer = zip.getFileData(filename.c_str(), &bufferSize);
                     if (bufferSize) {
                         // remove .lua or .luac extension
                         size_t pos = filename.find_last_of('.');
@@ -780,22 +780,22 @@ class LuaStack {
                                 filename[i] = '.';
                             }
                         }
-                        CCLOG("[luaLoadChunksFromZIP] add %s to preload", filename.c_str());
-                        if (stack->luaLoadBuffer(L, (char*)zbuffer, (int)bufferSize, filename.c_str()) == 0) {
+                        Log("[luaLoadChunksFromZIP] add %s to preload", filename.c_str());
+                        if (stack.luaLoadBuffer(L, (char*)zbuffer, (int)bufferSize, filename.c_str()) == 0) {
                             lua_setfield(L, -2, filename.c_str());
                             ++count;
                         }
                         free(zbuffer);
                     }
-                    filename = zip->getNextFilename();
+                    filename = zip.getNextFilename();
                 }
-                CCLOG("lua_loadChunksFromZIP() - loaded chunks count: %d", count);
+                Log("lua_loadChunksFromZIP() - loaded chunks count: %d", count);
                 lua_pop(L, 2);
                 lua_pushboolean(L, 1);
 
                 delete zip;
             } else {
-                CCLOG("lua_loadChunksFromZIP() - not found or invalid zip file: %s", zipFilePath.c_str());
+                Log("lua_loadChunksFromZIP() - not found or invalid zip file: %s", zipFilePath.c_str());
                 lua_pushboolean(L, 0);
             }
 
@@ -848,19 +848,19 @@ class LuaStack {
             switch (r)
             {
                 case LUA_ERRSYNTAX:
-                    CCLOG("[LUA ERROR] load \"%s\", error: syntax error during pre-compilation.", chunkName);
+                    Log("[LUA ERROR] load \"%s\", error: syntax error during pre-compilation.", chunkName);
                     break;
 
                 case LUA_ERRMEM:
-                    CCLOG("[LUA ERROR] load \"%s\", error: memory allocation error.", chunkName);
+                    Log("[LUA ERROR] load \"%s\", error: memory allocation error.", chunkName);
                     break;
 
                 case LUA_ERRFILE:
-                    CCLOG("[LUA ERROR] load \"%s\", error: cannot open/read file.", chunkName);
+                    Log("[LUA ERROR] load \"%s\", error: cannot open/read file.", chunkName);
                     break;
 
                 default:
-                    CCLOG("[LUA ERROR] load \"%s\", error: unknown.", chunkName);
+                    Log("[LUA ERROR] load \"%s\", error: unknown.", chunkName);
             }
         }
     #endif

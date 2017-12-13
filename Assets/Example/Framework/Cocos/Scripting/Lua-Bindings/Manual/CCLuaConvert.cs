@@ -17,16 +17,16 @@ void luaval_to_native_err(lua_State* L,const char* msg,tolua_Error* err, const c
         {
             int narg = err->index;
             if (err->array)
-                CCLOG("%s\n     %s argument #%d is array of '%s'; array of '%s' expected.\n",msg+2,funcName,narg,provided,expected);
+                Log("%s\n     %s argument #%d is array of '%s'; array of '%s' expected.\n",msg+2,funcName,narg,provided,expected);
             else
-                CCLOG("%s\n     %s argument #%d is '%s'; '%s' expected.\n",msg+2,funcName,narg,provided,expected);
+                Log("%s\n     %s argument #%d is '%s'; '%s' expected.\n",msg+2,funcName,narg,provided,expected);
         }
         else if (msg[1]=='v')
         {
             if (err->array)
-                CCLOG("%s\n     %s value is array of '%s'; array of '%s' expected.\n",funcName,msg+2,provided,expected);
+                Log("%s\n     %s value is array of '%s'; array of '%s' expected.\n",funcName,msg+2,provided,expected);
             else
-                CCLOG("%s\n     %s value is '%s'; '%s' expected.\n",msg+2,funcName,provided,expected);
+                Log("%s\n     %s value is '%s'; '%s' expected.\n",msg+2,funcName,provided,expected);
         }
     }
 }

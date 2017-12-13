@@ -86,7 +86,7 @@ namespace cocos2d;
         }
         else
         {
-            CCLOG("can not get file data of %s", chunkName.c_str());
+            Log("can not get file data of %s", chunkName.c_str());
             return 0;
         }
 

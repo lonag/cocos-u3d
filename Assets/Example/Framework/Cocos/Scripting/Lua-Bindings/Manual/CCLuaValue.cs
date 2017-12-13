@@ -1,5 +1,40 @@
 namespace cocos2d {
-    public class LuaValue {
+    public class LuaValue : CCObject
+    {
+        // typedef int LUA_FUNCTION;
+        // typedef int LUA_TABLE;
+        // typedef int LUA_STRING;
+
+        // class LuaValue;
+
+        // typedef std::map<std::string, LuaValue>   LuaValueDict;
+        // typedef LuaValueDict::const_iterator      LuaValueDictIterator;
+        // typedef std::list<LuaValue>               LuaValueArray;
+        // typedef LuaValueArray::const_iterator     LuaValueArrayIterator;
+
+        /// @cond
+        public enum LuaValueType{
+            LuaValueTypeInt,
+            LuaValueTypeFloat,
+            LuaValueTypeBoolean,
+            LuaValueTypeString,
+            LuaValueTypeDict,
+            LuaValueTypeArray,
+            LuaValueTypeObject
+        }
+        /// @endcond
+
+        /// @cond
+        // typedef union {
+        //     int                 intValue;
+        //     float               floatValue;
+        //     bool                booleanValue;
+        //     std::string*        stringValue;
+        //     LuaValueDict*     dictValue;
+        //     LuaValueArray*    arrayValue;
+        //     Ref*           ccobjectValue;
+        // } LuaValueField;
+
         public LuaValue intValue(const int intValue)
         {
             LuaValue value;
@@ -61,7 +96,7 @@ namespace cocos2d {
             LuaValue value;
             value._type = LuaValueTypeObject;
             value._field.ccobjectValue = ccobjectValue;
-            ccobjectValue->retain();
+            ccobjectValue.retain();
             value._ccobjectType = new std::string(objectTypename);
             return value;
         }
@@ -82,26 +117,26 @@ namespace cocos2d {
             return *this;
         }
 
-        LuaValue::~LuaValue(void)
-        {
-            if (_type == LuaValueTypeString)
-            {
-                delete _field.stringValue;
-            }
-            else if (_type == LuaValueTypeDict)
-            {
-                delete _field.dictValue;
-            }
-            else if (_type == LuaValueTypeArray)
-            {
-                delete _field.arrayValue;
-            }
-            else if (_type == LuaValueTypeObject)
-            {
-                _field.ccobjectValue->release();
-                delete _ccobjectType;
-            }
-        }
+        // LuaValue::~LuaValue(void)
+        // {
+        //     if (_type == LuaValueTypeString)
+        //     {
+        //         delete _field.stringValue;
+        //     }
+        //     else if (_type == LuaValueTypeDict)
+        //     {
+        //         delete _field.dictValue;
+        //     }
+        //     else if (_type == LuaValueTypeArray)
+        //     {
+        //         delete _field.arrayValue;
+        //     }
+        //     else if (_type == LuaValueTypeObject)
+        //     {
+        //         _field.ccobjectValue.release();
+        //         delete _ccobjectType;
+        //     }
+        // }
 
         public void copy(const LuaValue& rhs)
         {
@@ -122,10 +157,9 @@ namespace cocos2d {
             else if (_type == LuaValueTypeObject)
             {
                 _field.ccobjectValue = rhs._field.ccobjectValue;
-                _field.ccobjectValue->retain();
+                _field.ccobjectValue.retain();
                 _ccobjectType = new std::string(*rhs._ccobjectType);
             }
         }
-            
-    } 
+    }      
 } 
