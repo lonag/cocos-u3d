@@ -367,7 +367,7 @@ class LuaStack {
         }
     }
 
-    public bool  :pushFunctionByHandler(int nHandler)
+    public bool pushFunctionByHandler(int nHandler)
     {
         toluafix_get_function_by_refid(_state, nHandler);                  /* L: ... func */
         if (!lua_isfunction(_state, -1))
