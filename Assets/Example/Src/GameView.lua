@@ -159,14 +159,11 @@ function GameView:updateView()
 
 	if not self._unblock_bg then
     	self._unblock_bg= display.newSprite("#unblock_bg.png")
-    	print("unblock_bg is nil")
     	display.align(self._unblock_bg, display.CENTER, display.width/2, display.height/2)
 		self:addChild(self._unblock_bg)
     else
     	self._unblock_bg:removeAllChildren()
     end
-
-	print("unblock_bg", self._unblock_bg)
 
 	local bgSize = self._unblock_bg:getContentSize()
 	-- 4 x 4
@@ -208,36 +205,49 @@ function GameView:updateView()
 				if event.name == 'began' then
 					oldPos = cc.p(event.target:getPosition())
 					min_pos, max_pos = self:getCanMovePos(dir, oldPos ,i, j, width, v.len)
-					print("touch began")
+					print("began")
 					-- print("origin = ", event.target:getPosition())
 			  --       print("min", table.tostring(min_pos)) 
 			  --       print("max",table.tostring(max_pos))
 		        elseif event.name == 'moved' then
-		        	if not max_pos then
-		        		min_pos, max_pos = self:getCanMovePos(dir, oldPos ,i, j, width, v.len)
-		        	end
 		        	local newPos = event.target:getTouchMovePosition()
 		        	
 		        	local is_right = event.target:getTouchMovePosition().x - event.target:getTouchBeganPosition().x > 0
 		        	local is_top = event.target:getTouchMovePosition().y - event.target:getTouchBeganPosition().y > 0
+			        
 			        local parent = event.target:getParent()
 			        newPos = parent:convertToNodeSpace(newPos)
-		
-		        	local nextPos = cc.p(newPos.x - size.width/2, newPos.y + size.height/2)
+					
+					-- 数据取整，然后计算，干掉float引起的误差
+		        	local nextPos = cc.p(self:Integer(newPos.x - size.width/2), self:Integer(newPos.y + size.height/2))
 		        	-- FIX 20171214
 			        local x , y = nextPos.x, nextPos.y -- event.target:getPosition()
-			        
+			        print("new", table.tostring(nextPos), "origin", event.target:getPosition())
 			        if dir == 0 then
 			        	if x < max_pos.x and is_right then
 			        		block:setPositionX(nextPos.x)
 			        	elseif not is_right and x > min_pos.x then
 			        		block:setPositionX(nextPos.x)
 			        	end
+
+			        	if x > max_pos.x then
+			        		block:setPositionX(max_pos.x)
+			        	end
+			        	if x < min_pos.x then
+			        		block:setPositionX(min_pos.x)
+			        	end
 			        else
 			        	if is_top and y < max_pos.y then
 			        		block:setPositionY(nextPos.y)
 			        	elseif not is_top and y > min_pos.y then
 			        		block:setPositionY(nextPos.y)
+			        	end
+
+			        	if y > max_pos.y then
+			        		block:setPositionY(max_pos.y)
+			        	end
+			        	if y < min_pos.y then
+			        		block:setPositionY(min_pos.y)
 			        	end
 			        end
 				elseif event.name == 'cancelled' then
@@ -248,7 +258,9 @@ function GameView:updateView()
 					self:resetBlockMap(dir, BLOCK_RES["block"..i], i, j, 0) -- 删除旧的记录数据
 					local isRed = i == 1
 					local endPos = cc.p(event.target:getPosition())
+					-- 数据取整，float精度问题，会导致计算出现误差
 					endPos = cc.p(self:Integer(endPos.x), self:Integer(endPos.y))
+
 					-- 自动移动距离补齐一个格子
 					local widget_pos_x, widget_pos_y, isOver = self:blockMoveEnded(dir, oldPos, endPos, BLOCK_RES["block"..i], width ,event.target, v.len, i, j)
 					local action1 = cc.MoveTo:create(0.2, cc.p(widget_pos_x, widget_pos_y))
@@ -256,7 +268,6 @@ function GameView:updateView()
 						if isRed then
 							-- 通关条件
 							if isOver then
-								print("moveCall")
 								self:nextLevel()
 							end
 						end
@@ -294,6 +305,7 @@ function GameView:convertToUI(newPos)
 end
 
 function GameView:getBlockPos(block_pos, isCeil)
+	print("getBlockPos v = ",block_pos)
 	if isCeil then
 		return math.ceil(block_pos)
 	else
@@ -391,34 +403,16 @@ end
 
 -- FIXME跳过障碍移动， 需要判断能不能移动
 function GameView:blockMoveEnded(dir, oldPos, newPos, block_res_id, block_size, block, len, i, j)
-	-- local block = self._blocks[block_res_id]
 	local isRed = i == 1
 	if dir == 0 then
 		local isCeil = false
 		isCeil = newPos.x - oldPos.x > 0
-		local block_data = self._blocks[BLOCK_RES["block"..i]..j]
-		local origin_x = block_data.x
+	
 		local block_y = self:getBlockPos((oldPos.y - view_offset_y)/block_size, false)
-
-		-- 0 1 2 3 4 5
-		if self._blocks_map[origin_x + 1 +len][block_y] == 1 then
-			isCeil = false
-		end
-
 		local block_x = self:getBlockPos((newPos.x - view_offset_x)/block_size,isCeil)
-		
-		
+		local block_data = self._blocks[BLOCK_RES["block"..i]..j]
+		local origin_x = block_data.x	
 		print("new x", block_x)
-
-		
-		-- 调整边界
-		if block_x > self._blocks_map_size - 1 then
-			block_x = self._blocks_map_size - 1
-		end
-
-		if block_x < 0 then
-			block_x = 0
-		end
 
 		-- 调整边界
 		if block_x < 0 then
@@ -447,22 +441,6 @@ function GameView:blockMoveEnded(dir, oldPos, newPos, block_res_id, block_size, 
 		local block_y = self:getBlockPos((newPos.y - view_offset_y)/block_size, isCeil)
 		local block_data = self._blocks[BLOCK_RES["block"..i]..j]
 		print("new y", block_y, newPos.y - oldPos.y)
-		-- 调整边界
-		if block_y > self._blocks_map_size then
-			block_y = self._blocks_map_size
-		end
-
-		local origin_y = block_data.y
-		if block_y > origin_y or block_y < origin_y - len then
-			if self._blocks_map[block_x + 1][block_y] == 1 then
-				-- 调整边界，计算有误差
-				if isCeil then
-					block_y = block_y - 1
-				else
-					block_y = block_y + 1
-				end
-			end
-		end
 
 		-- 调整边界
 		if block_y - len < 0 then
@@ -474,7 +452,7 @@ function GameView:blockMoveEnded(dir, oldPos, newPos, block_res_id, block_size, 
 		end
 
 		block_data.y = block_y
-		block:setLocalZOrder(10 - block_y)--10 -v.y
+		block:setLocalZOrder(10 - block_y)--10 -v.y 动态修改zorder
 		print(block_data.y, "move", "V")
 		return oldPos.x, block_y* block_size - view_offset_y
 	end
@@ -483,7 +461,7 @@ end
 -- 清空移动前的block数据，然后再刷新
 function GameView:resetBlockMap(dir, block_res_id, i, j, record)
 	local v = self._blocks[BLOCK_RES["block"..i]..j]
-	print("reset", table.tostring(v))
+
 	local isRed = i == 1
 	if dir == 0 then
 		for idx = v.x , v.x + v.len - 1 do
@@ -502,7 +480,6 @@ function GameView:resetBlockMap(dir, block_res_id, i, j, record)
 end
 
 function GameView:nextLevel()
-	-- self:removeFromParent()
 	local view = app:createView("TipsView", {func = function()
 			print("start next level")
 			local record_lv = gGame:getLevelRecord(gGame:getMode())
@@ -519,7 +496,7 @@ function GameView:nextLevel()
 	app:getScene():addChild(view)
 end
 
-function GameView:toHome()
+function GameView:returnHome()
 
 end
 
