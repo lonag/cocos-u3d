@@ -37,7 +37,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cocos2d.actions
+namespace CocosFramework.actions
 {
     /** An action that moves the target with a CatmullRom curve to a destination point.
      A Catmull Rom is a Cardinal Spline with a tension of 0.5.

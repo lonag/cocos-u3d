@@ -1,4 +1,4 @@
-namespace cocos2d
+namespace CocosFramework
 {
     /*
      * Use delegate to implement the correspongding selector

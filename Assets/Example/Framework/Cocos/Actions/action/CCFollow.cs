@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 using System.Diagnostics;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// @brief CCFollow is an action that "follows" a node.

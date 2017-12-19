@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /** Singleton that manages the Animations.
     It saves in a cache the animations. You should use this class if you want to save your animations in a cache.

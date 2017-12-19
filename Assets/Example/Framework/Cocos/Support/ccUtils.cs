@@ -27,7 +27,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 
-namespace cocos2d
+namespace CocosFramework
 {
     public class ccUtils
     {

@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// This is the callback signature used to update the target property managed by this action.

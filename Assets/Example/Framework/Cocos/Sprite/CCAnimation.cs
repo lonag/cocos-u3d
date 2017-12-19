@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cocos2d
+namespace CocosFramework
 {
     // A CCAnimation object is used to perform animations on the CCSprite objects.
     // The CCAnimation object contains CCSpriteFrame objects, and a possible delay between the frames.

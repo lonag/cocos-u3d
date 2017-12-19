@@ -29,7 +29,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// @brief Base class for Grid actions

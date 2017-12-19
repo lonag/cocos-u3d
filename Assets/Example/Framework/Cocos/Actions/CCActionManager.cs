@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 using System.Collections.Generic;
 using System.Diagnostics;
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// @brief CCActionManager is a singleton that manages all the actions.

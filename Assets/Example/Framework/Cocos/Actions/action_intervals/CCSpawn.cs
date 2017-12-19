@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 using System.Diagnostics;
 using System;
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief Spawn a new action immediately */
     public class CCSpawn : CCActionInterval

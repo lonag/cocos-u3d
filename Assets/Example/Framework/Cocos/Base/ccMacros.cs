@@ -1,6 +1,6 @@
 using System;
 // using Microsoft.Xna.Framework.Graphics;
-namespace cocos2d
+namespace CocosFramework
 {
     public class ccMacros
     {

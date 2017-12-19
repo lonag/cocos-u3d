@@ -5,7 +5,7 @@ using System.Text;
 // using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// A CCCamera is used in every CCNode.

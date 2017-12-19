@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// CCRipple3D action

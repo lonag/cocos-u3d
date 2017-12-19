@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 using System.Diagnostics;
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief Executes an action in reverse order, from time=duration to time=0
  

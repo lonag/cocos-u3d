@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief CCTouchDispatcher.
  Singleton that handles all the touch events.

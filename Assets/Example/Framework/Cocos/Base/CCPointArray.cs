@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cocos2d
+namespace CocosFramework
 {
 /** An Array that contain control points.
  Used by CCCardinalSplineTo and (By) and CCCatmullRomTo (and By) actions.

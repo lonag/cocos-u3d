@@ -37,7 +37,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /** Cardinal Spline path.
      http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Cardinal_spline

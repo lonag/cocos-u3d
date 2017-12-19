@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief Moves a CCNode object to the position x,y. x and y are absolute coordinates by modifying it's position attribute.*/   
     public class CCMoveTo : CCActionInterval

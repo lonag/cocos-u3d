@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 using System;
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief An action that moves the target with a cubic Bezier curve by a certain distance. */
     public class CCBezierBy : CCActionInterval

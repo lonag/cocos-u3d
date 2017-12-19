@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace cocos2d
+namespace CocosFramework
 {
     public enum Orientation
     {

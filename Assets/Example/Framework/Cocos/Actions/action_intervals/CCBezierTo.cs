@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief An action that moves the target with a cubic Bezier curve to a destination point.
      @since v0.8.2

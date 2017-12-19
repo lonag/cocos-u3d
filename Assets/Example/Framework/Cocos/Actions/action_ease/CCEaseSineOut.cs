@@ -28,7 +28,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace cocos2d
+namespace CocosFramework
 {
     public class CCEaseSineOut : CCActionEase
     {

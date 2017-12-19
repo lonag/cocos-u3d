@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// @brief This action simulates a page turn from the bottom right hand corner of the screen.

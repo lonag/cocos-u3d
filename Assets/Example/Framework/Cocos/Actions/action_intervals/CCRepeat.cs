@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief Repeats an action a number of times.
      * To repeat an action forever use the CCRepeatForever action.

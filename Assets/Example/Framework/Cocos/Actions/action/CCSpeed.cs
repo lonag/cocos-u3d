@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 using System;
 using System.Diagnostics;
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// @brief Changes the speed of an action, making it take longer (speed>1)

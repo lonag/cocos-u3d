@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief Rotates a CCNode object clockwise a number of degrees by modifying it's rotation attribute. */
     public class CCRotateBy : CCActionInterval

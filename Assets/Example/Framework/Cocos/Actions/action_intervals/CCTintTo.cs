@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief Tints a CCNode that implements the CCNodeRGB protocol from current tint to a custom one.
      @warning This action doesn't support "reverse"

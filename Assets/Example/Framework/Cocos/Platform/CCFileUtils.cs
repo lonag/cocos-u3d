@@ -5,7 +5,7 @@ using System.Text;
 // using Microsoft.Xna.Framework.Content;
 using cocos2d.Framework;
 
-namespace cocos2d
+namespace CocosFramework
 {
     public class AssetBundleInfo {
         public AssetBundle m_AssetBundle;

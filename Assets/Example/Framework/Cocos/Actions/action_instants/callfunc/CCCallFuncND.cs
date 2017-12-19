@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 using System;
-namespace cocos2d
+namespace CocosFramework
 {
     /** 
     @brief Calls a 'callback' with the node as the first argument and the 2nd argument is data

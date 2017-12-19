@@ -27,7 +27,7 @@ using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// Whether or not an CCSprite will rotate, scale or translate with it's parent.

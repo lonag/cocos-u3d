@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 using System.Diagnostics;
-namespace cocos2d
+namespace CocosFramework
 {
     public class CCRepeatForever : CCActionInterval
     {

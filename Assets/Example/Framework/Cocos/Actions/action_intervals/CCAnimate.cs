@@ -25,7 +25,7 @@ THE SOFTWARE.
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /** @brief Animates a sprite given the name of an Animation */
     public class CCAnimate : CCActionInterval

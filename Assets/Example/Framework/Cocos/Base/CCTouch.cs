@@ -1,4 +1,4 @@
-namespace cocos2d
+namespace CocosFramework
 {
     public class CCTouch : CCObject
     {

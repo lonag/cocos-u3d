@@ -28,7 +28,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace cocos2d.actions.action_intervals.action_ease
+namespace CocosFramework.actions.action_intervals.action_ease
 {
     public class CCEaseElasticInOut : CCEaseElastic
     {

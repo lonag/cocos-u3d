@@ -1,5 +1,5 @@
 using System;
-namespace cocos2d
+namespace CocosFramework
 {
     public class CCPointExtension
     {

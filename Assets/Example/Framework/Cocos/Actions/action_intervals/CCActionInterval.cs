@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 using System;
 using System.Diagnostics;
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// @brief An interval action is an action that takes place within a certain period of time.

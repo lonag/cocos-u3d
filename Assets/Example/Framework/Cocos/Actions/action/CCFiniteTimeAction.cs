@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 using System;
 using System.Diagnostics;
-namespace cocos2d
+namespace CocosFramework
 {
     public class CCFiniteTimeAction : CCAction
     {

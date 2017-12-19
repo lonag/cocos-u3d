@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 
-namespace cocos2d
+namespace CocosFramework
 {
     public abstract class CCDirector : CCObject
     {

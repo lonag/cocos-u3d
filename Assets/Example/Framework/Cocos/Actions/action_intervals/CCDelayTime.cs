@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 using System;
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// @brief Delays the action a certain amount of seconds

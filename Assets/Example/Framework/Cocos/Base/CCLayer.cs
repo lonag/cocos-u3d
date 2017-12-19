@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// @brief CCLayer is a subclass of CCNode that implements the TouchEventsDelegate protocol.

@@ -30,7 +30,7 @@ using System.Text;
 using System.Diagnostics;
 // using Microsoft.Xna.Framework;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// CCSpriteBatchNode is like a batch node: if it contains children, it will draw them in 1 single OpenGL call

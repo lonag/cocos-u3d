@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 using System;
 
-namespace cocos2d
+namespace CocosFramework
 {
     /// <summary>
     /// @brief CCStopGrid action.
