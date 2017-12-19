@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using cocos2d;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+using CocosFramework;
+//using Microsoft.Xna.Framework;
+//using Microsoft.Xna.Framework.Content;
 
 namespace HelloCocos2d
 {
     public class AppDelegate : CCApplication
     {
-        public AppDelegate(Game game, GraphicsDeviceManager graphics)
-            : base(game, graphics)
+        public AppDelegate()
+            //: base(game, graphics)
         {
             CCApplication.sm_pSharedApplication = this;
         }
@@ -33,13 +33,13 @@ namespace HelloCocos2d
         /// </returns>
         public override bool applicationDidFinishLaunching()
         {
-            LuaEngine engine = LuaEngine.getInstance();
-            ScriptEngineManager.getInstance().setScriptEngine(engine);
-            IntPtr L = engine.getLuaStack().getLuaState();
-            // lua_module_register(L);
-            // register_all_packages();
-            LuaStack* stack = engine.getLuaStack();
-            engine->executeScriptFile("main.lua");
+            //LuaEngine engine = LuaEngine.getInstance();
+            //ScriptEngineManager.getInstance().setScriptEngine(engine);
+            //IntPtr L = engine.getLuaStack().getLuaState();
+            //// lua_module_register(L);
+            //// register_all_packages();
+            //LuaStack* stack = engine.getLuaStack();
+            //engine->executeScriptFile("main.lua");
             return true;
         }
 

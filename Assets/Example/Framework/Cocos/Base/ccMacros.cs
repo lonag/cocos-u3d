@@ -1,5 +1,5 @@
 using System;
-// using Microsoft.Xna.Framework.Graphics;
+
 namespace CocosFramework
 {
     public class ccMacros

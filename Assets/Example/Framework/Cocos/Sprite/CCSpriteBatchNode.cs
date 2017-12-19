@@ -511,8 +511,8 @@ namespace CocosFramework
             //    m_pGrid->afterDraw(this);
             //}
 
-            CCApplication.sharedApplication().basicEffect.World = CCApplication.sharedApplication().basicEffect.World * Matrix.Invert(m_tCCNodeTransform);
-            m_tCCNodeTransform = Matrix.Identity;
+            //CCApplication.sharedApplication().basicEffect.World = CCApplication.sharedApplication().basicEffect.World * Matrix.Invert(m_tCCNodeTransform);
+            //m_tCCNodeTransform = Matrix.Identity;
 
             //glPopMatrix();
         }
@@ -619,7 +619,7 @@ namespace CocosFramework
 #if CC_SPRITEBATCHNODE_DEBUG_DRAW
                     // issue #528
                     CCRect rect = pChild->boundingBox();
-                    CCPoint vertices[4]={
+                    Vector2 vertices[4]={
                         ccp(rect.origin.x,rect.origin.y),
                         ccp(rect.origin.x+rect.size.width,rect.origin.y),
                         ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height),

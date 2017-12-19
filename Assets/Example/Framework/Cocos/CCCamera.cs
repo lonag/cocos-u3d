@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-// using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
 namespace CocosFramework
@@ -83,21 +82,21 @@ namespace CocosFramework
         /// <summary>
         ///  Sets the camera using gluLookAt using its eye, center and up_vector
         /// </summary>
-        public Matrix? locate()
-        {
-            if (m_bDirty)
-            {
-                return Matrix.CreateLookAt(new Vector3(m_fEyeX, m_fEyeY, m_fEyeZ),
-                             new Vector3(m_fCenterX, m_fCenterY, m_fCenterZ), 
-                             new Vector3(m_fUpX, m_fUpY, m_fUpZ));
+        //public Matrix4x4? locate()
+        //{
+        //    if (m_bDirty)
+        //    {
+        //        return Matrix4x4.CreateLookAt(new Vector3(m_fEyeX, m_fEyeY, m_fEyeZ),
+        //                     new Vector3(m_fCenterX, m_fCenterY, m_fCenterZ), 
+        //                     new Vector3(m_fUpX, m_fUpY, m_fUpZ));
 
-                //gluLookAt(m_fEyeX, m_fEyeY, m_fEyeZ,
-                //    m_fCenterX, m_fCenterY, m_fCenterZ,
-                //    m_fUpX, m_fUpY, m_fUpZ);
-            }
+        //        //gluLookAt(m_fEyeX, m_fEyeY, m_fEyeZ,
+        //        //    m_fCenterX, m_fCenterY, m_fCenterZ,
+        //        //    m_fUpX, m_fUpY, m_fUpZ);
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         /// <summary>
         /// sets the eye values in points

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace CocosFramework
 {
@@ -16,17 +17,17 @@ namespace CocosFramework
         kOrientationLandscapeRight = 3,
     } ;
 
-    public abstract class CCApplication : Microsoft.Xna.Framework.DrawableGameComponent
+    public abstract class CCApplication : MonoBehaviour
     {
 
         #region Fields and Construct Method
 
-        Game game;
+        //Game game;
 
         // CCTouch m_pTouch;
-        internal GraphicsDeviceManager graphics;
-        protected Rectangle m_rcViewPort;
-        protected IEGLTouchDelegate m_pDelegate;
+        //internal GraphicsDeviceManager graphics;
+        //protected Rectangle m_rcViewPort;
+        //protected IEGLTouchDelegate m_pDelegate;
         // List<CCTouch> m_pSet;
 
         protected bool m_bCaptured;
@@ -35,56 +36,15 @@ namespace CocosFramework
         private readonly LinkedList<CCTouch> m_pTouches;
         private readonly Dictionary<int, LinkedListNode<CCTouch>> m_pTouchMap;
 
-        public CCApplication(Game game, GraphicsDeviceManager graphics)
-            : base(game)
+        public CCApplication()
         {
-            this.game = game;
-            this.graphics = graphics;
-            this.content = game.Content;
-
-            // MonoGame 3D
-#if MONO3D
-            if (graphics.GraphicsDevice == null)
-            {
-                graphics.CreateDevice();
-            }
-#endif
-#if WINDOWS || XBOX || XBOX360
-            graphics.DeviceCreated += new EventHandler<EventArgs>(graphics_DeviceCreated);
-#endif
-            game.Window.OrientationChanged += Window_OrientationChanged;
-
-            TouchPanel.EnabledGestures = GestureType.Tap;
-
-            //m_pTouch = new CCTouch();
-            //m_pSet = new List<CCTouch>();
-            m_pTouches = new LinkedList<CCTouch>();
-            m_pTouchMap = new Dictionary<int, LinkedListNode<CCTouch>>();
-
-            m_fScreenScaleFactor = 1.0f;
-
-#warning "set height and width as Graphics.Device.Viewport"
-
-#if WP7 || WINPHONE || WINDOWS_PHONE
-            m_rcViewPort = new Rectangle(0, 0, 800, 480); //graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
-            _size = new CCSize(800,480);
-#elif !WINDOWS && !XBOX && !XBOX360
-            if (graphics.GraphicsDevice == null)
-            {
-                graphics.DeviceCreated += new EventHandler<EventArgs>(graphics_DeviceCreated);
-            }
-            else
-            {
-                m_rcViewPort = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
-                _size = new CCSize(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
-            }
-#endif
+            
         }
 
         void graphics_DeviceCreated(object sender, EventArgs e)
         {
-            m_rcViewPort = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
-            _size = new CCSize(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+            //m_rcViewPort = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+            //_size = new CCSize(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
         }
 
         #endregion
@@ -99,7 +59,7 @@ namespace CocosFramework
 
         #region GameComponent
 
-        public override void Initialize()
+        public void Initialize()
         {
             sm_pSharedApplication = this;
 
@@ -107,7 +67,7 @@ namespace CocosFramework
 
             initInstance();
 
-            base.Initialize();
+            //base.Initialize();
         }
 
         /// <summary>
@@ -115,41 +75,41 @@ namespace CocosFramework
         /// in a stream of state updates.
         /// </summary>
         /// <param name="gameTime">This is the current game time.</param>
-        public override void Update(GameTime gameTime)
+        public void Update()
         {
             // Process touch events 
-            ProcessTouch();
+            //ProcessTouch();
             if (!CCDirector.sharedDirector().isPaused)
             {
-                CCScheduler.sharedScheduler().tick((float)gameTime.ElapsedGameTime.TotalSeconds);
+                //CCScheduler.sharedScheduler().tick((float)gameTime.ElapsedGameTime.TotalSeconds);
                 //m_fDeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            base.Update(gameTime);
+            //base.Update(gameTime);
         }
 
         /// <summary>
         /// Invoked by the render engine when the game components need to be refreshed.
         /// </summary>
         /// <param name="gameTime">This is the current game time.</param>
-        public override void Draw(GameTime gameTime)
+        public void Draw()
         {
-            basicEffect.View = viewMatrix;
-            basicEffect.World = worldMatrix;
-            basicEffect.Projection = projectionMatrix;
+            //basicEffect.View = viewMatrix;
+            //basicEffect.World = worldMatrix;
+            //basicEffect.Projection = projectionMatrix;
 
-            CCDirector.sharedDirector().mainLoop(gameTime); // TODO: Split into two parts - the update and the draw
+            CCDirector.sharedDirector().mainLoop(); // TODO: Split into two parts - the update and the draw
 
-            base.Draw(gameTime);
+            //base.Draw(gameTime);
         }
 
-        protected override void LoadContent()
+        protected void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            basicEffect = new BasicEffect(GraphicsDevice);
+            //spriteBatch = new SpriteBatch(GraphicsDevice);
+            //basicEffect = new BasicEffect(GraphicsDevice);
 
-            GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            //GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
-            base.LoadContent();
+            //base.LoadContent();
 
             applicationDidFinishLaunching();
         }
@@ -158,74 +118,74 @@ namespace CocosFramework
 
         #region Touch Methods
 
-        public IEGLTouchDelegate TouchDelegate
-        {
-            set { m_pDelegate = value; }
-        }
+        //public IEGLTouchDelegate TouchDelegate
+        //{
+        //    set { m_pDelegate = value; }
+        //}
 
-        private void ProcessTouch()
-        {
-            if (m_pDelegate != null)
-            {
-                TouchCollection touchCollection = TouchPanel.GetState();
+        //private void ProcessTouch()
+        //{
+        //    if (m_pDelegate != null)
+        //    {
+        //        TouchCollection touchCollection = TouchPanel.GetState();
 
-                List<CCTouch> newTouches = new List<CCTouch>();
-                List<CCTouch> movedTouches = new List<CCTouch>();
-                List<CCTouch> endedTouches = new List<CCTouch>();
+        //        List<CCTouch> newTouches = new List<CCTouch>();
+        //        List<CCTouch> movedTouches = new List<CCTouch>();
+        //        List<CCTouch> endedTouches = new List<CCTouch>();
 
-                foreach (TouchLocation touch in touchCollection)
-                {
-                    switch (touch.State)
-                    {
-                        case TouchLocationState.Pressed:
-                            if (m_rcViewPort.Contains((int)touch.Position.X, (int)touch.Position.Y))
-                            {
-                                m_pTouches.AddLast(new CCTouch(touch.Id, touch.Position.X - m_rcViewPort.Left / m_fScreenScaleFactor, touch.Position.Y - m_rcViewPort.Top / m_fScreenScaleFactor));
-                                m_pTouchMap[touch.Id] = m_pTouches.Last;
-                                newTouches.Add(m_pTouches.Last.Value);
-                            }
-                            break;
+        //        foreach (TouchLocation touch in touchCollection)
+        //        {
+        //            switch (touch.State)
+        //            {
+        //                case TouchLocationState.Pressed:
+        //                    if (m_rcViewPort.Contains((int)touch.Position.X, (int)touch.Position.Y))
+        //                    {
+        //                        m_pTouches.AddLast(new CCTouch(touch.Id, touch.Position.X - m_rcViewPort.Left / m_fScreenScaleFactor, touch.Position.Y - m_rcViewPort.Top / m_fScreenScaleFactor));
+        //                        m_pTouchMap[touch.Id] = m_pTouches.Last;
+        //                        newTouches.Add(m_pTouches.Last.Value);
+        //                    }
+        //                    break;
 
-                        case TouchLocationState.Moved:
-                            if (m_pTouchMap.ContainsKey(touch.Id))
-                            {
-                                movedTouches.Add(m_pTouchMap[touch.Id].Value);
-                                m_pTouchMap[touch.Id].Value.SetTouchInfo(touch.Id,
-                                    touch.Position.X - m_rcViewPort.Left / m_fScreenScaleFactor,
-                                    touch.Position.Y - m_rcViewPort.Top / m_fScreenScaleFactor);
-                            }
-                            break;
+        //                case TouchLocationState.Moved:
+        //                    if (m_pTouchMap.ContainsKey(touch.Id))
+        //                    {
+        //                        movedTouches.Add(m_pTouchMap[touch.Id].Value);
+        //                        m_pTouchMap[touch.Id].Value.SetTouchInfo(touch.Id,
+        //                            touch.Position.X - m_rcViewPort.Left / m_fScreenScaleFactor,
+        //                            touch.Position.Y - m_rcViewPort.Top / m_fScreenScaleFactor);
+        //                    }
+        //                    break;
 
-                        case TouchLocationState.Released:
-                            if (m_pTouchMap.ContainsKey(touch.Id))
-                            {
-                                endedTouches.Add(m_pTouchMap[touch.Id].Value);
-                                m_pTouches.Remove(m_pTouchMap[touch.Id]);
-                                m_pTouchMap.Remove(touch.Id);
-                            }
-                            break;
+        //                case TouchLocationState.Released:
+        //                    if (m_pTouchMap.ContainsKey(touch.Id))
+        //                    {
+        //                        endedTouches.Add(m_pTouchMap[touch.Id].Value);
+        //                        m_pTouches.Remove(m_pTouchMap[touch.Id]);
+        //                        m_pTouchMap.Remove(touch.Id);
+        //                    }
+        //                    break;
 
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+        //                default:
+        //                    throw new ArgumentOutOfRangeException();
+        //            }
 
-                }
-                if (newTouches.Count > 0)
-                {
-                    m_pDelegate.touchesBegan(newTouches, null);
-                }
+        //        }
+        //        if (newTouches.Count > 0)
+        //        {
+        //            m_pDelegate.touchesBegan(newTouches, null);
+        //        }
 
-                if (movedTouches.Count > 0)
-                {
-                    m_pDelegate.touchesMoved(movedTouches, null);
-                }
+        //        if (movedTouches.Count > 0)
+        //        {
+        //            m_pDelegate.touchesMoved(movedTouches, null);
+        //        }
 
-                if (endedTouches.Count > 0)
-                {
-                    m_pDelegate.touchesEnded(endedTouches, null);
-                }
-            }
-        }
+        //        if (endedTouches.Count > 0)
+        //        {
+        //            m_pDelegate.touchesEnded(endedTouches, null);
+        //        }
+        //    }
+        //}
 
         private CCTouch getTouchBasedOnID(int nID)
         {
@@ -313,7 +273,7 @@ namespace CocosFramework
         {
             set
             {
-                game.TargetElapsedTime = TimeSpan.FromSeconds(value);
+                //game.TargetElapsedTime = TimeSpan.FromSeconds(value);
             }
         }
 
@@ -322,54 +282,10 @@ namespace CocosFramework
         /// </summary>
         /// <param name="orientation">The defination of orientation which CCDirector want change to.</param>
         /// <returns>The actual orientation of the application.</returns>
-        public Orientation setOrientation(Orientation orientation)
-        {
-#if WP7 || WINPHONE || WINDOWS_PHONE
-            // Windows Phone always has a 480 x 800 configuration for now.
-            int w = 480;
-            int h = 800;
-#else
-            int w = graphics.GraphicsDevice.Viewport.Width;
-            int h = graphics.GraphicsDevice.Viewport.Height;
-            if (w > h)
-            {
-                // Swap to be in portrate orientation
-                // where width < height
-                int z = h;
-                h = w;
-                w = z;
-            }
-#endif
-            switch (orientation)
-            {
-                case Orientation.kOrientationLandscapeLeft:
-                    graphics.PreferredBackBufferWidth = h;
-                    graphics.PreferredBackBufferHeight = w;
-                    _size = new CCSize(h, w);
-                    m_rcViewPort = new Rectangle(0, 0, h, w);
-                    graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
-                    graphics.ApplyChanges();
-                    return Orientation.kOrientationLandscapeLeft;
+        //public Orientation setOrientation(Orientation orientation)
+        //{
 
-                case Orientation.kOrientationLandscapeRight:
-                    graphics.PreferredBackBufferWidth = h;
-                    graphics.PreferredBackBufferHeight = w;
-                    _size = new CCSize(h, w);
-                    m_rcViewPort = new Rectangle(0, 0, h, w);
-                    graphics.SupportedOrientations = DisplayOrientation.LandscapeRight;
-                    graphics.ApplyChanges();
-                    return Orientation.kOrientationLandscapeRight;
-
-                default:
-                    graphics.PreferredBackBufferWidth = w;
-                    graphics.PreferredBackBufferHeight = h;
-                    _size = new CCSize(w, h);
-                    m_rcViewPort = new Rectangle(0, 0, w, h);
-                    graphics.SupportedOrientations = DisplayOrientation.Portrait;
-                    graphics.ApplyChanges();
-                    return Orientation.kOrientationPortrait;
-            }
-        }
+        //}
         void Window_OrientationChanged(object sender, EventArgs e)
         {
             // throw new NotImplementedException();
@@ -393,28 +309,28 @@ namespace CocosFramework
         /// <summary>
         /// Gets the current ContentManager
         /// </summary>
-        public ContentManager content
-        {
-            get;
-            private set;
-        }
-        internal SpriteBatch spriteBatch
-        {
-            get;
-            private set;
-        }
+        //public ContentManager content
+        //{
+        //    get;
+        //    private set;
+        //}
+        //internal SpriteBatch spriteBatch
+        //{
+        //    get;
+        //    private set;
+        //}
 
-        internal Matrix worldMatrix;
-        internal Matrix viewMatrix;
-        internal Matrix projectionMatrix;
-        internal BasicEffect basicEffect
-        {
-            get;
-            private set;
-        }
+        //internal Matrix worldMatrix;
+        //internal Matrix viewMatrix;
+        //internal Matrix projectionMatrix;
+        //internal BasicEffect basicEffect
+        //{
+        //    get;
+        //    private set;
+        //}
         
         bool m_bOrientationReverted;
-        Point m_tSizeInPoints;
+        CCPoint m_tSizeInPoints;
 
         public bool canSetContentScaleFactor
         {
@@ -447,6 +363,5 @@ namespace CocosFramework
         void centerWindow()
         { }
 
-        #endregion
     }
 }

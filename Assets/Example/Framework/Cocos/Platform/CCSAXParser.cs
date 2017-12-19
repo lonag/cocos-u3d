@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework;
 using System.Threading;
 using System.Globalization;
-using cocos2d.Framework;
+//using CocosFramework.Framework;
 using System.IO;
 using System.Xml.Linq;
 

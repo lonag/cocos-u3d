@@ -126,7 +126,7 @@ ZWTCoordinatesFormatOptionXML1_2 = 3, // Desktop Version 1.0.2+
                     spriteFrame.initWithTexture(pobTexture,
                                                 new CCRect(x, y, w, h),
                                                 false,
-                                                new CCPoint(ox, oy),
+                                                new Vector2(ox, oy),
                                                 new CCSize((float)ow, (float)oh)
                                                 );
                 }
@@ -144,7 +144,7 @@ ZWTCoordinatesFormatOptionXML1_2 = 3, // Desktop Version 1.0.2+
                         }
                     }
 
-                    CCPoint offset = CCNS.CCPointFromString(valueForKey("offset", frameDict));
+                    Vector2 offset = CCNS.Vector2FromString(valueForKey("offset", frameDict));
                     CCSize sourceSize = CCNS.CCSizeFromString(valueForKey("sourceSize", frameDict));
 
                     // create frame
@@ -161,7 +161,7 @@ ZWTCoordinatesFormatOptionXML1_2 = 3, // Desktop Version 1.0.2+
                     {
                         // get values
                         CCSize spriteSize = CCNS.CCSizeFromString(valueForKey("spriteSize", frameDict));
-                        CCPoint spriteOffset = CCNS.CCPointFromString(valueForKey("spriteOffset", frameDict));
+                        Vector2 spriteOffset = CCNS.Vector2FromString(valueForKey("spriteOffset", frameDict));
                         CCSize spriteSourceSize = CCNS.CCSizeFromString(valueForKey("spriteSourceSize", frameDict));
                         CCRect textureRect = CCNS.CCRectFromString(valueForKey("textureRect", frameDict));
                         bool textureRotated = false;

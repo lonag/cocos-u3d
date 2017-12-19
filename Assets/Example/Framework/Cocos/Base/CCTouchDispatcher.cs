@@ -22,7 +22,7 @@ namespace CocosFramework
 
  @since v0.8.0
  */
-    public class CCTouchDispatcher : IEGLTouchDelegate
+    public class CCTouchDispatcher : ICCTouchDelegate
     {
         #region singleton
 

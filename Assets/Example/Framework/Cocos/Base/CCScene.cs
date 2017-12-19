@@ -30,7 +30,7 @@ namespace CocosFramework
         public CCScene()
         {
             isRelativeAnchorPoint = false;
-            anchorPoint = CCPointExtension.ccp(0.5f, 0.5f);
+            anchorPoint = Vector2Extension.ccp(0.5f, 0.5f);
             m_eSceneType = ccSceneFlag.ccNormalScene;
         }
 

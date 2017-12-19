@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
+//using Microsoft.Xna.Framework;
 
 namespace CocosFramework.actions.action_intervals.action_ease
 {

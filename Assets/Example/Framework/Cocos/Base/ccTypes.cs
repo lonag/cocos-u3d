@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace CocosFramework
 {
     /// <summary>
-    /// RGB color composed of bytes 3 bytes
+    /// RGB color composed of floats 3 floats
     /// @since v0.8
     /// </summary>
     public class ccColor3B
@@ -25,20 +26,20 @@ namespace CocosFramework
             b = copy.b;
         }
 
-        public ccColor3B(byte inr, byte ing, byte inb)
+        public ccColor3B(float inr, float ing, float inb)
         {
             r = inr;
             g = ing;
             b = inb;
         }
 
-        // public Color XNAColor
-        // {
-        //     get
-        //     {
-        //         return (new Color(r, g, b, 255));
-        //     }
-        // }
+        public Color Color
+        {
+            get
+            {
+                return (new Color(r, g, b, 255));
+            }
+        }
 
         public ccColor3B copy()
         {
@@ -48,20 +49,20 @@ namespace CocosFramework
         /// <summary>
         /// Convert Color value of XNA Framework to ccColor3B type
         /// </summary>
-        public ccColor3B(Microsoft.Xna.Framework.Color color)
+        public ccColor3B(Color color)
         {
-            r = color.R;
-            g = color.G; // was color.B
-            b = color.B;
+            r = color.r;
+            g = color.g; // was color.B
+            b = color.b;
         }
 
-        public byte r;
-        public byte g;
-        public byte b;
+        public float r;
+        public float g;
+        public float b;
     }
 
     /// <summary>
-    /// RGBA color composed of 4 bytes
+    /// RGBA color composed of 4 floats
     /// @since v0.8
     /// </summary>
     public class ccColor4B
@@ -99,7 +100,7 @@ namespace CocosFramework
             b = c3.b;
             a = 255;
         }
-        public ccColor4B(byte inr, byte ing, byte inb, byte ina)
+        public ccColor4B(float inr, float ing, float inb, float ina)
         {
             r = inr;
             g = ing;
@@ -114,18 +115,18 @@ namespace CocosFramework
         /// <summary>
         /// Convert Color value of XNA Framework to ccColor4B type
         /// </summary>
-        public ccColor4B(Microsoft.Xna.Framework.Color color)
+        public ccColor4B(Color color)
         {
-            r = color.R;
-            g = color.G; // was color.B
-            b = color.B;
-            a = color.A;
+            r = color.r;
+            g = color.g; // was color.B
+            b = color.b;
+            a = color.a;
         }
 
-        public byte r;
-        public byte g;
-        public byte b;
-        public byte a;
+        public float r;
+        public float g;
+        public float b;
+        public float a;
 
         public string ToString()
         {
@@ -135,7 +136,7 @@ namespace CocosFramework
         public static ccColor4B Parse(string s)
         {
             string[] f = s.Split(',');
-            return(new ccColor4B(byte.Parse(f[0]), byte.Parse(f[1]), byte.Parse(f[2]), byte.Parse(f[3])));
+            return(new ccColor4B(float.Parse(f[0]), float.Parse(f[1]), float.Parse(f[2]), float.Parse(f[3])));
         }
     }
 
@@ -267,9 +268,9 @@ namespace CocosFramework
             v = inv;
         }
 
-        public Vector2 ToVector2()
+        public CCPoint ToCCPoint()
         {
-            return (new Vector2(u, v));
+            return (new CCPoint(u, v));
         }
 
         public float u;
@@ -288,9 +289,9 @@ namespace CocosFramework
             size = 0.0f;
         }
 
-        public ccVertex2F pos;		// 8 bytes
-        public ccColor4B color;		// 4 bytes
-        public float size;		// 4 bytes
+        public ccVertex2F pos;		// 8 floats
+        public ccColor4B color;		// 4 floats
+        public float size;		// 4 floats
     }
 
     /// <summary>
@@ -428,12 +429,12 @@ namespace CocosFramework
         /// <summary>
         /// vertices (3F)
         /// </summary>
-        public ccVertex3F vertices;			// 12 bytes
+        public ccVertex3F vertices;			// 12 floats
 
         /// <summary>
         /// colors (4B)
         /// </summary>
-        public ccColor4B colors;				// 4 bytes
+        public ccColor4B colors;				// 4 floats
 
         /// <summary>
         /// tex coords (2F)
@@ -508,71 +509,71 @@ namespace CocosFramework
         /// </summary>
         public ccV3F_C4B_T2F br;
 
-        public VertexPositionColorTexture[] getVertices(ccDirectorProjection projection)
-        {
-            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[4];
+        //public VertexPositionColorTexture[] getVertices(ccDirectorProjection projection)
+        //{
+        //    VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[4];
 
-            if (projection == ccDirectorProjection.kCCDirectorProjection2D)
-            {
-                vertices[0] = new VertexPositionColorTexture(
-                    new Vector3(this.bl.vertices.x, this.bl.vertices.y, this.bl.vertices.z),
-                    new Color(this.tl.colors.r, this.tl.colors.g, this.tl.colors.b, this.tl.colors.a),
-                    new Vector2(this.bl.texCoords.u, this.bl.texCoords.v));
+        //    if (projection == ccDirectorProjection.kCCDirectorProjection2D)
+        //    {
+        //        vertices[0] = new VertexPositionColorTexture(
+        //            new Vector3(this.bl.vertices.x, this.bl.vertices.y, this.bl.vertices.z),
+        //            new Color(this.tl.colors.r, this.tl.colors.g, this.tl.colors.b, this.tl.colors.a),
+        //            new CCPoint(this.bl.texCoords.u, this.bl.texCoords.v));
 
-                vertices[1] = new VertexPositionColorTexture(
-                    new Vector3(this.br.vertices.x, this.br.vertices.y, this.br.vertices.z),
-                    new Color(this.tr.colors.r, this.tr.colors.g, this.tr.colors.b, this.tr.colors.a),
-                    new Vector2(this.br.texCoords.u, this.br.texCoords.v));
+        //        vertices[1] = new VertexPositionColorTexture(
+        //            new Vector3(this.br.vertices.x, this.br.vertices.y, this.br.vertices.z),
+        //            new Color(this.tr.colors.r, this.tr.colors.g, this.tr.colors.b, this.tr.colors.a),
+        //            new CCPoint(this.br.texCoords.u, this.br.texCoords.v));
 
-                vertices[2] = new VertexPositionColorTexture(
-                    new Vector3(this.tl.vertices.x, this.tl.vertices.y, this.tl.vertices.z),
-                    new Color(this.bl.colors.r, this.bl.colors.g, this.bl.colors.b, this.bl.colors.a),
-                    new Vector2(this.tl.texCoords.u, this.tl.texCoords.v));
+        //        vertices[2] = new VertexPositionColorTexture(
+        //            new Vector3(this.tl.vertices.x, this.tl.vertices.y, this.tl.vertices.z),
+        //            new Color(this.bl.colors.r, this.bl.colors.g, this.bl.colors.b, this.bl.colors.a),
+        //            new CCPoint(this.tl.texCoords.u, this.tl.texCoords.v));
 
-                vertices[3] = new VertexPositionColorTexture(
-                    new Vector3(this.tr.vertices.x, this.tr.vertices.y, this.tr.vertices.z),
-                    new Color(this.br.colors.r, this.br.colors.g, this.br.colors.b, this.br.colors.a),
-                    new Vector2(this.tr.texCoords.u, this.tr.texCoords.v));
-            }
-            else
-            {
-                vertices[0] = new VertexPositionColorTexture(
-                    new Vector3(this.tl.vertices.x, this.tl.vertices.y, this.tl.vertices.z),
-                    new Color(this.tl.colors.r, this.tl.colors.g, this.tl.colors.b, this.tl.colors.a),
-                    new Vector2(this.tl.texCoords.u, this.tl.texCoords.v));
+        //        vertices[3] = new VertexPositionColorTexture(
+        //            new Vector3(this.tr.vertices.x, this.tr.vertices.y, this.tr.vertices.z),
+        //            new Color(this.br.colors.r, this.br.colors.g, this.br.colors.b, this.br.colors.a),
+        //            new CCPoint(this.tr.texCoords.u, this.tr.texCoords.v));
+        //    }
+        //    else
+        //    {
+        //        vertices[0] = new VertexPositionColorTexture(
+        //            new Vector3(this.tl.vertices.x, this.tl.vertices.y, this.tl.vertices.z),
+        //            new Color(this.tl.colors.r, this.tl.colors.g, this.tl.colors.b, this.tl.colors.a),
+        //            new CCPoint(this.tl.texCoords.u, this.tl.texCoords.v));
 
-                vertices[1] = new VertexPositionColorTexture(
-                    new Vector3(this.tr.vertices.x, this.tr.vertices.y, this.tr.vertices.z),
-                    new Color(this.tr.colors.r, this.tr.colors.g, this.tr.colors.b, this.tr.colors.a),
-                    new Vector2(this.tr.texCoords.u, this.tr.texCoords.v));
+        //        vertices[1] = new VertexPositionColorTexture(
+        //            new Vector3(this.tr.vertices.x, this.tr.vertices.y, this.tr.vertices.z),
+        //            new Color(this.tr.colors.r, this.tr.colors.g, this.tr.colors.b, this.tr.colors.a),
+        //            new CCPoint(this.tr.texCoords.u, this.tr.texCoords.v));
 
-                vertices[2] = new VertexPositionColorTexture(
-                    new Vector3(this.bl.vertices.x, this.bl.vertices.y, this.bl.vertices.z),
-                    new Color(this.bl.colors.r, this.bl.colors.g, this.bl.colors.b, this.bl.colors.a),
-                     new Vector2(this.bl.texCoords.u, this.bl.texCoords.v));
+        //        vertices[2] = new VertexPositionColorTexture(
+        //            new Vector3(this.bl.vertices.x, this.bl.vertices.y, this.bl.vertices.z),
+        //            new Color(this.bl.colors.r, this.bl.colors.g, this.bl.colors.b, this.bl.colors.a),
+        //             new CCPoint(this.bl.texCoords.u, this.bl.texCoords.v));
 
-                vertices[3] = new VertexPositionColorTexture(
-                    new Vector3(this.br.vertices.x, this.br.vertices.y, this.br.vertices.z),
-                    new Color(this.br.colors.r, this.br.colors.g, this.br.colors.b, this.br.colors.a),
-                    new Vector2(this.br.texCoords.u, this.br.texCoords.v));
-            }
+        //        vertices[3] = new VertexPositionColorTexture(
+        //            new Vector3(this.br.vertices.x, this.br.vertices.y, this.br.vertices.z),
+        //            new Color(this.br.colors.r, this.br.colors.g, this.br.colors.b, this.br.colors.a),
+        //            new CCPoint(this.br.texCoords.u, this.br.texCoords.v));
+        //    }
 
-            return vertices;
-        }
+        //    return vertices;
+        //}
 
-        public short[] getIndexes(ccDirectorProjection projection)
-        {
-            short[] indexes = new short[6];
+        //public short[] getIndexes(ccDirectorProjection projection)
+        //{
+        //    short[] indexes = new short[6];
 
-            indexes[0] = 0;
-            indexes[1] = 1;
-            indexes[2] = 2;
-            indexes[3] = 2;
-            indexes[4] = 1;
-            indexes[5] = 3;
+        //    indexes[0] = 0;
+        //    indexes[1] = 1;
+        //    indexes[2] = 2;
+        //    indexes[3] = 2;
+        //    indexes[4] = 1;
+        //    indexes[5] = 3;
 
-            return indexes;
-        }
+        //    return indexes;
+        //}
     }
 
     /// <summary>
@@ -666,14 +667,14 @@ namespace CocosFramework
         public static readonly ccColor3B ccGRAY = new ccColor3B(166, 166, 166);
 
         //! helper macro that creates an ccColor3B type
-        static public ccColor3B ccc3(byte r, byte g, byte b)
+        static public ccColor3B ccc3(float r, float g, float b)
         {
             ccColor3B c = new ccColor3B(r, g, b);
             return c;
         }
 
         //! helper macro that creates an ccColor4B type
-        public static ccColor4B ccc4(byte r, byte g, byte b, byte o)
+        public static ccColor4B ccc4(float r, float g, float b, float o)
         {
             ccColor4B c = new ccColor4B(r, g, b, o);
             return c;

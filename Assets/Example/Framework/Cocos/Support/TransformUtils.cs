@@ -2,26 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
+//using Microsoft.Xna.Framework;
+using UnityEngine;
 
 namespace CocosFramework
 {
     public class TransformUtils
     {
-        public static Matrix CGAffineToMatrix(float[] m)
+        public static Matrix4x4 CGAffineToMatrix(float[] m)
         {
-            Matrix mat = new Matrix()
+            Matrix4x4 mat = new Matrix4x4()
             {
-                M11 = m[0],M21 = m[4],M31 = m[8],M41 = m[12],
-                M12 = m[1],M22 = m[5],M32 = m[9],M42 = m[13],
-                M13 = m[2],M23 = m[6],M33 = m[10],M43 = m[14],
-                M14 = m[3],M24 = m[7],M34 = m[11],M44 = m[15],
+                m00 = m[0],m10 = m[4],m20 = m[8],m30 = m[12],
+                m01 = m[1],m11 = m[5],m21 = m[9],m31 = m[13],
+                m02 = m[2],m12 = m[6],m22 = m[10],m32 = m[14],
+                m03 = m[3],m13 = m[7],m23 = m[11],m33 = m[15],
             };
 
             return mat;
         }
 
-        public static Matrix CGAffineToMatrix(CCAffineTransform t)
+        public static Matrix4x4 CGAffineToMatrix(CCAffineTransform t)
         {
             float[] m = new float[16];
             CGAffineToGL(t, ref m);

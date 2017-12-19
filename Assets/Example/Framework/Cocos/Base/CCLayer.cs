@@ -13,7 +13,7 @@ namespace CocosFramework
     {
         public CCLayer()
         {
-            anchorPoint = CCPointExtension.ccp(0.5f, 0.5f);
+            anchorPoint = Vector2Extension.ccp(0.5f, 0.5f);
             isRelativeAnchorPoint = false;
         }
 

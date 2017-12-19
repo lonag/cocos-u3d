@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 // root name of xml
 
-using cocos2d;
+using CocosFramework;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Collections.Generic;

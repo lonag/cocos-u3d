@@ -9,7 +9,7 @@ namespace CocosFramework
     {
         static CCDirector s_sharedDirector = new CCDisplayLinkDirector();
         static bool s_bFirstRun = true;
-
+        static int kDefaultFPS = 60;
         /// <summary>
         /// returns a shared instance of the director
         /// </summary>
@@ -24,8 +24,6 @@ namespace CocosFramework
 
             return s_sharedDirector;
         }
-
-        #endregion
 
         public virtual bool init()
         {
@@ -50,7 +48,7 @@ namespace CocosFramework
             return true;
         }
 
-        public abstract void mainLoop(GameTime gameTime);
+        public abstract void mainLoop();
 
         #region sceneManagement
 
@@ -58,13 +56,13 @@ namespace CocosFramework
         /// Draw the scene.
         /// This method is called every frame. Don't call it manually.
         /// </summary>
-        protected void drawScene(GameTime gameTime)
+        protected void drawScene()
         {
-            
+
             if (!m_bPaused)
             {
                 //CCScheduler.sharedScheduler().tick((float)gameTime.ElapsedGameTime.TotalSeconds);
-                m_fDeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //m_fDeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
             /* to avoid flickr, nextScene MUST be here: after tick and before draw.
@@ -76,7 +74,7 @@ namespace CocosFramework
 
             //glPushMatrix();
 
-            applyOrientation();
+            //applyOrientation();
 
             // By default enable VertexArray, ColorArray, TextureCoordArray and Texture2D
             // CC_ENABLE_DEFAULT_GL_STATES();
@@ -109,23 +107,23 @@ namespace CocosFramework
         {
             // If it is not a transition, call onExit/cleanup
             /*if (! newIsTransition)*/
-            if (!(m_pNextScene is CCTransitionScene))
-            {
-                if (m_pRunningScene != null)
-                {
-                    m_pRunningScene.onExit();
+            //if (!(m_pNextScene is CCTransitionScene))
+            //{
+            //    if (m_pRunningScene != null)
+            //    {
+            //        m_pRunningScene.onExit();
 
-                    //CLEAR TOUCHES BEFORE LEAVING
-                    CCApplication.sharedApplication().ClearTouches();
-                }
+            //        //CLEAR TOUCHES BEFORE LEAVING
+            //        CCApplication.sharedApplication().ClearTouches();
+            //    }
 
-                // issue #709. the root node (scene) should receive the cleanup message too
-                // otherwise it might be leaked.
-                if (m_bSendCleanupToScene && m_pRunningScene != null)
-                {
-                    m_pRunningScene.cleanup();
-                }
-            }
+            //    // issue #709. the root node (scene) should receive the cleanup message too
+            //    // otherwise it might be leaked.
+            //    if (m_bSendCleanupToScene && m_pRunningScene != null)
+            //    {
+            //        m_pRunningScene.cleanup();
+            //    }
+            //}
 
             m_pRunningScene = m_pNextScene;
             // m_pNextScene.retain();
@@ -134,11 +132,11 @@ namespace CocosFramework
             if (m_pRunningScene != null)
             {
                 m_pRunningScene.onEnter();
-                if (m_pRunningScene is CCTransitionScene)
-                {
-                m_pRunningScene.onEnterTransitionDidFinish();
+                //if (m_pRunningScene is CCTransitionScene)
+                //{
+                //    m_pRunningScene.onEnterTransitionDidFinish();
+                //}
             }
-        }
         }
 
         /// <summary>
@@ -191,7 +189,7 @@ namespace CocosFramework
 
             if (c == 0)
             {
-                CCApplication.sharedApplication().Game.Exit();
+                //CCApplication.sharedApplication().Game.Exit();
                 end();
             }
             else
@@ -207,7 +205,7 @@ namespace CocosFramework
                 return m_pobScenesStack[m_pobScenesStack.Count - 2];
             else
                 return null;
-        
+
         }
 
         /// <summary>
@@ -310,7 +308,7 @@ namespace CocosFramework
         List<CCScene> m_pobScenesStack = new List<CCScene>();
 
         /* window size in pixels */
-        CCSize m_obWinSizeInPixels;
+        //CCSize m_obWinSizeInPixels;
 
         /* content scale factor */
         float m_fContentScaleFactor = 1;
@@ -454,4 +452,5 @@ namespace CocosFramework
         {
 
         }
+    }
 }
