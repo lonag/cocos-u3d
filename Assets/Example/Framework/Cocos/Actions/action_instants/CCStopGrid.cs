@@ -35,13 +35,13 @@ namespace CocosFramework
     {
         public override void startWithTarget(CCNode pTarget)
         {
-            base.startWithTarget(pTarget);
+            //base.startWithTarget(pTarget);
 
-            CCGridBase pGrid = m_pTarget.Grid;
-            if (pGrid != null && pGrid.Active)
-            {
-                pGrid.Active = false;
-            }
+            //CCGridBase pGrid = m_pTarget.Grid;
+            //if (pGrid != null && pGrid.Active)
+            //{
+            //    pGrid.Active = false;
+            //}
         }
 
         public static new CCStopGrid action()

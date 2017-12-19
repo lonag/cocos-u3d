@@ -41,9 +41,9 @@ namespace CocosFramework
         public override void startWithTarget(CCNode target)
         {
             base.startWithTarget(target);
-            m_sConfig.controlPoint_1 = Vector2Extension.ccpSub(m_sConfig.controlPoint_1, m_startPosition);
-            m_sConfig.controlPoint_2 = Vector2Extension.ccpSub(m_sConfig.controlPoint_2, m_startPosition);
-            m_sConfig.endPosition = Vector2Extension.ccpSub(m_sConfig.endPosition, m_startPosition);
+            m_sConfig.controlPoint_1 = CCPointExtension.ccpSub(m_sConfig.controlPoint_1, m_startPosition);
+            m_sConfig.controlPoint_2 = CCPointExtension.ccpSub(m_sConfig.controlPoint_2, m_startPosition);
+            m_sConfig.endPosition = CCPointExtension.ccpSub(m_sConfig.endPosition, m_startPosition);
         }
 
         public override CCObject copyWithZone(CCZone zone)

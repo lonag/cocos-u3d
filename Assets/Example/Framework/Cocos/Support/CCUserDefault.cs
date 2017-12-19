@@ -98,9 +98,9 @@ public class CCUserDefault {
 			createXMLFile();
 		}
 
-		using (IsolatedStorageFileStream fileStream = myIsolatedStorage.OpenFile(XML_FILE_NAME, FileMode.Open, FileAccess.Read)) {
-			parseXMLFile(fileStream);
-		}
+        //using (IsolatedStorageFileStream fileStream = myIsolatedStorage.OpenFile(XML_FILE_NAME, FileMode.Open, FileAccess.Read)) {
+        //    parseXMLFile(fileStream);
+        //}
 	}
 
 	public void purgeSharedUserDefault()
@@ -233,10 +233,10 @@ public class CCUserDefault {
 	{
 		bool bRet = false;
 
-		if (myIsolatedStorage.FileExists(XML_FILE_NAME)) 
-		{
-			bRet = true;
-		}
+        //if (myIsolatedStorage.FileExists(XML_FILE_NAME)) 
+        //{
+        //    bRet = true;
+        //}
 
 		return bRet;
 	}

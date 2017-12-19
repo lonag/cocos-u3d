@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-//using Microsoft.Xna.Framework;
+using UnityEngine;
 
 namespace CocosFramework
 {
@@ -34,7 +34,7 @@ namespace CocosFramework
     {
         public override void update(float time) 
         {
-            m_pOther.update((float)Math.Sin(time * (float)MathHelper.TwoPi));
+            m_pOther.update((float)Math.Sin(time * (float)Mathf.PI * 2f));
         }
 
         public override CCFiniteTimeAction reverse() 

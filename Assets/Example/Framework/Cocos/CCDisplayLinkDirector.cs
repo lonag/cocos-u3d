@@ -63,7 +63,7 @@ namespace CocosFramework
             }
             else if (!m_bInvalid)
             {
-                drawScene(gameTime);
+                drawScene();
             }
         }
 

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CocosFramework;
-//using Microsoft.Xna.Framework;
-//using Microsoft.Xna.Framework.Content;
 
 namespace HelloCocos2d
 {

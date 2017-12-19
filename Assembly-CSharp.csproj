@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <LangVersion>4</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
@@ -19,10 +22,11 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Temp\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_5_6_2;UNITY_5_6;UNITY_5;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_RUNTIME_NAVMESH_BUILDING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;INCLUDE_DYNAMIC_GI;INCLUDE_GI;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_SCRIPTING_NEW_CSHARP_COMPILER;ENABLE_VIDEO;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_VR;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_2_0_SUBSET;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_TEAM_LICENSE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_2_1;UNITY_2017_2;UNITY_2017;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_GRID;ENABLE_TILEMAP;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_DIRECTOR;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_TIMELINE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;ENABLE_SPRITE_MASKING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;ENABLE_MONO_BDWGC;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_VIDEO;ENABLE_RMGUI;ENABLE_PACKMAN;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_STYLE_SHEETS;PLATFORM_STANDALONE_WIN;PLATFORM_STANDALONE;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_VR;ENABLE_AR;ENABLE_SPATIALTRACKING;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_2_0_SUBSET;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -39,14 +44,13 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>D:/Program Files/Editor/Data/Managed/UnityEngine.dll</HintPath>
+      <HintPath>D:/Program Files/Editor/Data/Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>D:/Program Files/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Example\Framework\Cocos\Actions\CCActionManager.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action\CCAction.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action\CCFiniteTimeAction.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action\CCFollow.cs" />
@@ -75,6 +79,10 @@
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_ease\CCEaseSineIn.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_ease\CCEaseSineInOut.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_ease\CCEaseSineOut.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\callfunc\CCCallFunc.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\callfunc\CCCallFuncN.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\callfunc\CCCallFuncND.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\callfunc\CCCallFuncO.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\CCActionInstant.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\CCFlipX.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\CCFlipY.cs" />
@@ -84,10 +92,6 @@
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\CCShow.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\CCStopGrid.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\CCToggleVisibility.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\callfunc\CCCallFunc.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\callfunc\CCCallFuncN.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\callfunc\CCCallFuncND.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Actions\action_instants\callfunc\CCCallFuncO.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_intervals\CCActionInterval.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_intervals\CCActionTween.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_intervals\CCAnimate.cs" />
@@ -121,12 +125,16 @@
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_intervals\CCTintTo.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_progress_timer\CCProgressFromTo.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Actions\action_progress_timer\CCProgressTo.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Actions\CCActionManager.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCAffineTransform.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Base\CCBundleCache.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Base\ccConfig.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCData.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCGeometry.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCLayer.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Base\CCNS.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Base\ccMacros.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCNode.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Base\CCNS.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCObject.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCPointArray.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCPointExtension.cs" />
@@ -137,22 +145,16 @@
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCScriptEngineProtocol.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCStandardTouchHandler.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCTargetedTouchHandler.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Base\CCTexture2D.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Base\CCTextureAtlas.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Base\CCTextureCache.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Base\CCTexturePVR.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCTouch.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCTouchDelegate.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCTouchDispatcher.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCTouchHandler.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Base\ccTypes.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\CCZone.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\ICCStandardTouchDelegate.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\ICCTargetedTouchDelegate.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\ICCTouchDelegate.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Base\SelectorProtocol.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Base\ccConfig.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Base\ccMacros.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Base\ccTypes.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\CCCamera.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\CCDirector.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\CCDisplayLinkDirector.cs" />
@@ -164,39 +166,35 @@
      <Compile Include="Assets\Example\Framework\Cocos\Platform\CCLog.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Platform\CCSAXParser.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Platform\ICCSAXDelegator.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Scripting\Lua-Bindings\Auto\UnityEngine_Wrap.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Scripting\Lua-Bindings\Auto\LuaAutoBinder.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Scripting\Lua-Bindings\Auto\UnityEngine_AnimatorWrap.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Scripting\Lua-Bindings\Manual\sharplua.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Scripting\Lua-Bindings\Manual\sharpobject.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Sprite\CCAnimation.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Sprite\CCAnimationCache.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Sprite\CCSprite.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Sprite\CCSpriteBatchNode.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Sprite\CCSpriteFrame.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Sprite\CCSpriteFrameCache.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\CCUserDefault.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Support\ccUtils.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\CCVertex.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\Adler.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\Crc32.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\FlushType.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\GZipStream.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\InfTree.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\InflateBlocks.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\InflateCodes.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\InflateManager.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\InfTree.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\SharedUtils.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\ZlibBaseStream.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\ZlibCodec.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\ZlibException.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\Compression\ZlibStreamFlavor.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Support\TransformUtils.cs" />
-     <Compile Include="Assets\Example\Framework\Cocos\Support\ccUtils.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\data_support\ccCArray.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\image_support\TGAlib.cs" />
+     <Compile Include="Assets\Example\Framework\Cocos\Support\TransformUtils.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\zip_support\CCZHeader.cs" />
      <Compile Include="Assets\Example\Framework\Cocos\Support\zip_support\ZipUtils.cs" />
      <Compile Include="Assets\Example\Framework\Runtime-Src\Classes\AppDelegate.cs" />
-     <None Include="Assets\Example\Framework\Cocos\Scripting\Lua-Bindings\Runtime\tolua\CMakeLists.txt" />
-     <None Include="Assets\Example\Framework\Cocos\Scripting\Lua-Bindings\Runtime\lua\CMakeLists.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -209,17 +207,29 @@
  <Reference Include="nunit.framework">
  <HintPath>D:/Program Files/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll</HintPath>
  </Reference>
- <Reference Include="UnityEngine.Analytics">
- <HintPath>D:/Program Files/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+ <Reference Include="UnityEngine.Timeline">
+ <HintPath>D:/Program Files/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.UIAutomation">
+ <HintPath>D:/Program Files/Editor/Data/UnityExtensions/Unity/UIAutomation/UnityEngine.UIAutomation.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.GoogleAudioSpatializer">
+ <HintPath>D:/Program Files/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
  <HintPath>D:/Program Files/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
  </Reference>
- <Reference Include="UnityEngine.VR">
- <HintPath>D:/Program Files/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
+ <Reference Include="UnityEngine.SpatialTracking">
+ <HintPath>D:/Program Files/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
  </Reference>
  <Reference Include="Debugger">
  <HintPath>E:/cocos-u3d/Assets/Plugins/Debugger.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>C:/Users/Administrator/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.analytics@1.0.1/UnityEngine.Analytics.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Purchasing">
+ <HintPath>C:/Users/Administrator/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.purchasing@1.0.1/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

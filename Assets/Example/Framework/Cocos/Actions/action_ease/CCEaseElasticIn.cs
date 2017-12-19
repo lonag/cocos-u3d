@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace CocosFramework
 {
@@ -43,7 +44,7 @@ namespace CocosFramework
             {
                 float s = m_fPeriod / 4;
                 time = time - 1;
-                newT = -(float)(Math.Pow(2, 10 * time) * Math.Sin((time - s) * MathHelper.Pi * 2.0f / m_fPeriod));
+                newT = -(float)(Math.Pow(2, 10 * time) * Math.Sin((time - s) * Mathf.PI * 2.0f / m_fPeriod));
             }
 
             m_pOther.update(newT);

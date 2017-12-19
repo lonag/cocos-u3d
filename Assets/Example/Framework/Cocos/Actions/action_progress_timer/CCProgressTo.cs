@@ -75,17 +75,17 @@ namespace CocosFramework
         public override void startWithTarget(CCNode pTarget)
         {
             base.startWithTarget(pTarget);
-            m_fFrom = ((CCProgressTimer)(pTarget)).Percentage;
-            // XXX: Is this correct ?
-            // Adding it to support CCRepeat
-            if (m_fFrom == 100)
-            {
-                m_fFrom = 0;
-            }
+            //m_fFrom = ((CCProgressTimer)(pTarget)).Percentage;
+            //// XXX: Is this correct ?
+            //// Adding it to support CCRepeat
+            //if (m_fFrom == 100)
+            //{
+            //    m_fFrom = 0;
+            //}
         }
         public override void update(float time)
         {
-            ((CCProgressTimer)m_pTarget).Percentage = m_fFrom + (m_fTo - m_fFrom) * time;
+            //((CCProgressTimer)m_pTarget).Percentage = m_fFrom + (m_fTo - m_fFrom) * time;
             //throw new NotImplementedException();
         }
 

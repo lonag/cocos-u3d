@@ -25,8 +25,8 @@ THE SOFTWARE.
 
 using System;
 using System.Diagnostics;
-//using Microsoft.Xna.Framework.Graphics;
-//using Microsoft.Xna.Framework;
+using UnityEngine;
+
 namespace CocosFramework
 {
     /// <summary>
@@ -233,8 +233,8 @@ namespace CocosFramework
             set { m_sBlendFunc = value; }
         }
 
-        protected CCTextureAtlas m_pobTextureAtlas;
-        protected CCSpriteBatchNode m_pobBatchNode;
+        //protected CCTextureAtlas m_pobTextureAtlas;
+        //protected CCSpriteBatchNode m_pobBatchNode;
 
         /** weak reference of the CCTextureAtlas used when the sprite is rendered using a CCSpriteBatchNode */
         ///@todo add m_pobTextureAtlas
@@ -277,14 +277,14 @@ namespace CocosFramework
             m_obUnflippedOffsetPositionFromCenter = new CCPoint();
         }
 
-        #region spriteWith:CCTexture2D,CCSpriteFrame,File,BatchNode
+        #region spriteWith:AssetBundle,CCSpriteFrame,File,BatchNode
 
         /// <summary>
         /// Creates an sprite with a texture.
         /// The rect used will be the size of the texture.
         /// The offset will be (0,0).
         /// </summary>
-        public static CCSprite spriteWithTexture(CCTexture2D texture)
+        public static CCSprite spriteWithTexture(AssetBundle texture)
         {
             CCSprite sprite = new CCSprite();
             if (sprite != null && sprite.initWithTexture(texture))
@@ -300,7 +300,7 @@ namespace CocosFramework
         /// Creates an sprite with a texture and a rect.
         /// The offset will be (0,0).
         /// </summary>
-        public static CCSprite spriteWithTexture(CCTexture2D texture, CCRect rect)
+        public static CCSprite spriteWithBundle(AssetBundle texture, CCRect rect)
         {
             CCSprite sprite = new CCSprite();
             if (sprite != null && sprite.initWithTexture(texture, rect))
@@ -315,41 +315,10 @@ namespace CocosFramework
         /// <summary>
         /// Creates an sprite with a texture, a rect and offset. 
         /// </summary>
-        public static CCSprite spriteWithTexture(CCTexture2D texture, CCRect rect, CCPoint offset)
+        public static CCSprite spriteWithTexture(AssetBundle texture, CCRect rect, CCPoint offset)
         {
             // not implement
             return null;
-        }
-
-        /// <summary>
-        /// Creates an sprite with an sprite frame.
-        /// </summary>
-        public static CCSprite spriteWithSpriteFrame(CCSpriteFrame pSpriteFrame)
-        {
-            CCSprite pobSprite = new CCSprite();
-            if (pobSprite != null && pobSprite.initWithSpriteFrame(pSpriteFrame))
-            {
-                return pobSprite;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Creates an sprite with an sprite frame name.
-        /// An CCSpriteFrame will be fetched from the CCSpriteFrameCache by name.
-        /// If the CCSpriteFrame doesn't exist it will raise an exception.
-        /// @since v0.9
-        /// </summary>
-        public static CCSprite spriteWithSpriteFrameName(string pszSpriteFrameName)
-        {
-
-
-            CCSpriteFrame pFrame = CCSpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName(pszSpriteFrameName);
-
-            string msg = string.Format("Invalid spriteFrameName: {0}", pszSpriteFrameName);
-            Debug.Assert(pFrame != null, msg);
-            return spriteWithSpriteFrame(pFrame);
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -389,16 +358,16 @@ namespace CocosFramework
         /// <summary>
         /// Creates an sprite with an CCBatchNode and a rect 
         /// </summary>
-        public static CCSprite spriteWithBatchNode(CCSpriteBatchNode batchNode, CCRect rect)
-        {
-            CCSprite pobSprite = new CCSprite();
-            if (pobSprite.initWithBatchNode(batchNode, rect))
-            {
-                return pobSprite;
-            }
+        //public static CCSprite spriteWithBatchNode(CCSpriteBatchNode batchNode, CCRect rect)
+        //{
+        //    CCSprite pobSprite = new CCSprite();
+        //    if (pobSprite.initWithBatchNode(batchNode, rect))
+        //    {
+        //        return pobSprite;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         #endregion
 
@@ -416,8 +385,8 @@ namespace CocosFramework
             m_sColorUnmodified = new ccColor3B(255, 255, 255);
 
             m_sBlendFunc = new ccBlendFunc();
-            m_sBlendFunc.src = ccMacros.CC_BLEND_SRC;
-            m_sBlendFunc.dst = ccMacros.CC_BLEND_DST;
+            //m_sBlendFunc.src = ccMacros.CC_BLEND_SRC;
+            //m_sBlendFunc.dst = ccMacros.CC_BLEND_DST;
 
 
             // update texture (calls updateBlendFunc)
@@ -466,7 +435,7 @@ namespace CocosFramework
         {
             if (m_bUseBatchNode)
             {
-                m_pobBatchNode.removeSpriteFromAtlas((CCSprite)(child));
+                //m_pobBatchNode.removeSpriteFromAtlas((CCSprite)(child));
             }
 
             base.removeChild(child, cleanup);
@@ -478,7 +447,7 @@ namespace CocosFramework
             {
                 foreach (CCNode node in m_pChildren)
                 {
-                    m_pobBatchNode.removeSpriteFromAtlas((CCSprite)(node));
+                    //m_pobBatchNode.removeSpriteFromAtlas((CCSprite)(node));
                 }
             }
 
@@ -489,8 +458,8 @@ namespace CocosFramework
 
         public override void reorderChild(CCNode child, int zOrder)
         {
-            Debug.Assert(child != null);
-            Debug.Assert(m_pChildren.Contains(child));
+            //Debug.Assert(child != null);
+            //Debug.Assert(m_pChildren.Contains(child));
 
             if (zOrder == child.zOrder)
             {
@@ -521,18 +490,18 @@ namespace CocosFramework
 
         public override void addChild(CCNode child, int zOrder, int tag)
         {
-            Debug.Assert(child != null);
+            //Debug.Assert(child != null);
 
-            base.addChild(child, zOrder, tag);
+            //base.addChild(child, zOrder, tag);
 
-            if (m_bUseBatchNode)
-            {
-                Debug.Assert(((CCSprite)child).Texture.Name == m_pobTextureAtlas.Texture.Name);
-                int index = m_pobBatchNode.atlasIndexForChild((CCSprite)child, zOrder);
-                m_pobBatchNode.insertChild((CCSprite)child, index);
-            }
+            //if (m_bUseBatchNode)
+            //{
+            //    Debug.Assert(((CCSprite)child).Texture.Name == m_pobTextureAtlas.Texture.Name);
+            //    int index = m_pobBatchNode.atlasIndexForChild((CCSprite)child, zOrder);
+            //    m_pobBatchNode.insertChild((CCSprite)child, index);
+            //}
 
-            m_bHasChildren = true;
+            //m_bHasChildren = true;
         }
 
         #endregion
@@ -774,7 +743,7 @@ namespace CocosFramework
             {
                 if (m_uAtlasIndex != ccMacros.CCSpriteIndexNotInitialized)
                 {
-                    m_pobTextureAtlas.updateQuad(m_sQuad, m_uAtlasIndex);
+                    //m_pobTextureAtlas.updateQuad(m_sQuad, m_uAtlasIndex);
                 }
                 else
                 {
@@ -789,11 +758,11 @@ namespace CocosFramework
         }
 
         // CCTextureProtocol
-        public virtual CCTexture2D Texture
+        public virtual AssetBundle Texture
         {
             set
             {
-                Debug.Assert(!m_bUseBatchNode, "CCSprite: setTexture doesn't work when the sprite is rendered using a CCSpriteBatchNode");
+                //Debug.Assert(!m_bUseBatchNode, "CCSprite: setTexture doesn't work when the sprite is rendered using a CCSpriteBatchNode");
 
                 m_pobTexture = value;
 
@@ -809,24 +778,25 @@ namespace CocosFramework
         /// The rect used will be the size of the texture.
         /// The offset will be (0,0).
         /// </summary>
-        public bool initWithTexture(CCTexture2D texture)
+        public bool initWithTexture(AssetBundle texture)
         {
-            if (texture == null)
-        {
-                throw (new ArgumentNullException("texture", "Texture cannot be null"));
-            }
+            //if (texture == null)
+            //{
+            //    throw (new ArgumentNullException("texture", "Texture cannot be null"));
+            //}
 
-            CCRect rect = new CCRect();
-            rect.size = texture.getContentSize();
+            //CCRect rect = new CCRect();
+            //rect.size = texture.getContentSize();
 
-            return initWithTexture(texture, rect);
+            //return initWithTexture(texture, rect);¡¢
+            return false;
         }
 
         /// <summary>
         /// Initializes an sprite with a texture and a rect.
         /// The offset will be (0,0).
         /// </summary>
-        public bool initWithTexture(CCTexture2D texture, CCRect rect)
+        public bool initWithTexture(AssetBundle texture, CCRect rect)
         {
             if (texture == null)
             {
@@ -839,39 +809,8 @@ namespace CocosFramework
             return true;
         }
 
-        /// <summary>
-        /// Initializes an sprite with an sprite frame.
-        /// </summary>
-        public bool initWithSpriteFrame(CCSpriteFrame pSpriteFrame)
-        {
-            if (pSpriteFrame == null)
-            {
-                throw (new ArgumentNullException("pSpriteFrame", "SpriteFrame cannot be null"));
-            }
-
-            bool bRet = initWithTexture(pSpriteFrame.Texture, pSpriteFrame.Rect);
-            DisplayFrame = pSpriteFrame;
-
-            return bRet;
-        }
-
-        /// <summary>
-        /// Initializes an sprite with an sprite frame name.
-        /// An CCSpriteFrame will be fetched from the CCSpriteFrameCache by name.
-        /// If the CCSpriteFrame doesn't exist it will raise an exception.
-        /// @since v0.9
-        /// </summary>
-        public bool initWithSpriteFrameName(string spriteFrameName)
-        {
-            if (spriteFrameName == null)
-            {
-                throw (new ArgumentNullException("spriteFrameName", "spriteFrameName cannot be null"));
-            }
-
-            CCSpriteFrame pFrame = CCSpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName(spriteFrameName);
-            return initWithSpriteFrame(pFrame);
-        }
-
+       
+        
         /// <summary>
         /// Initializes an sprite with an image filename.
         /// The rect used will be the size of the image.
@@ -879,16 +818,16 @@ namespace CocosFramework
         /// </summary>
         public bool initWithFile(string fileName)
         {
-            Debug.Assert(null != fileName, "fileName is null");
+            //Debug.Assert(null != fileName, "fileName is null");
 
-            CCTexture2D textureFromFile = CCTextureCache.sharedTextureCache().addImage(fileName);
+            //AssetBundle textureFromFile = CCTextureCache.sharedTextureCache().addImage(fileName);
 
-            if (null != textureFromFile)
-            {
-                CCRect rect = new CCRect();
-                rect.size = textureFromFile.getContentSize();
-                return initWithTexture(textureFromFile, rect);
-            }
+            //if (null != textureFromFile)
+            //{
+            //    CCRect rect = new CCRect();
+            //    rect.size = textureFromFile.getContentSize();
+            //    return initWithTexture(textureFromFile, rect);
+            //}
 
             return false;
         }
@@ -899,13 +838,13 @@ namespace CocosFramework
         /// </summary>
         public bool initWithFile(string fileName, CCRect rect)
         {
-            Debug.Assert(fileName != null);
+            //Debug.Assert(fileName != null);
 
-            CCTexture2D pTexture = CCTextureCache.sharedTextureCache().addImage(fileName);
-            if (pTexture != null)
-            {
-                return initWithTexture(pTexture, rect);
-            }
+            //AssetBundle pTexture = CCTextureCache.sharedTextureCache().addImage(fileName);
+            //if (pTexture != null)
+            //{
+            //    return initWithTexture(pTexture, rect);
+            //}
 
             // don't release here.
             // when load texture failed, it's better to get a "transparent" sprite then a crashed program
@@ -913,183 +852,9 @@ namespace CocosFramework
             return false;
         }
 
-        /// <summary>
-        /// Initializes an sprite with an CCSpriteBatchNode and a rect in points
-        /// </summary>
-        public bool initWithBatchNode(CCSpriteBatchNode batchNode, CCRect rect)
-        {
-            if (initWithTexture(batchNode.Texture, rect))
-            {
-                useBatchNode(batchNode);
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Initializes an sprite with an CCSpriteBatchNode and a rect in pixels
-        /// @since v0.99.5
-        /// </summary>
-        public bool initWithBatchNodeRectInPixels(CCSpriteBatchNode batchNode, CCRect rect)
-        {
-            if (initWithTexture(batchNode.Texture))
-            {
-                setTextureRectInPixels(rect, false, rect.size);
-                useBatchNode(batchNode);
-                return true;
-            }
-            return false;
-        }
-
-        #endregion
-
-        // BatchNode methods
-
-        /// <summary>
-        /// updates the quad according the the rotation, position, scale values. 
-        /// </summary>
         public void updateTransform()
         {
-            Debug.Assert(m_bUsesBatchNode != null);
-
-            // optimization. Quick return if not dirty
-            if (!m_bDirty)
-            {
-                return;
-            }
-
-            CCAffineTransform matrix;
-
-            // Optimization: if it is not visible, then do nothing
-            if (!m_bIsVisible)
-            {
-                m_sQuad.br.vertices = m_sQuad.tl.vertices = m_sQuad.tr.vertices = m_sQuad.bl.vertices = new ccVertex3F(0, 0, 0);
-                m_pobTextureAtlas.updateQuad(m_sQuad, m_uAtlasIndex);
-                //m_bDirty = m_bRecursiveDirty = false;
-                return;
-            }
-
-            // Optimization: If parent is batchnode, or parent is nil
-            // build Affine transform manually
-            if (m_pParent == null || m_pParent == m_pobBatchNode)
-            {
-                float radians = -ccMacros.CC_DEGREES_TO_RADIANS(m_fRotation);
-                float c = (float)Math.Cos(radians);
-                float s = (float)Math.Sin(radians);
-
-                matrix = CCAffineTransform.CCAffineTransformMake(c * m_fScaleX, s * m_fScaleX,
-                    -s * m_fScaleY, c * m_fScaleY,
-                    m_tPositionInPixels.x, m_tPositionInPixels.y);
-                if (m_fSkewX > 0 || m_fSkewY > 0)
-                {
-                    CCAffineTransform skewMatrix = CCAffineTransform.CCAffineTransformMake(1.0f, (float)Math.Tan(ccMacros.CC_DEGREES_TO_RADIANS(m_fSkewY)),
-                        (float)Math.Tan(ccMacros.CC_DEGREES_TO_RADIANS(m_fSkewX)), 1.0f,
-                        0.0f, 0.0f);
-                    matrix = CCAffineTransform.CCAffineTransformConcat(skewMatrix, matrix);
-                }
-                matrix = CCAffineTransform.CCAffineTransformTranslate(matrix, -m_tAnchorPointInPixels.x, -m_tAnchorPointInPixels.y);
-            }
-            else // parent_ != batchNode_ 
-            {
-                // else do affine transformation according to the HonorParentTransform
-                matrix = CCAffineTransform.CCAffineTransformMakeIdentity();
-                ccHonorParentTransform prevHonor = ccHonorParentTransform.CC_HONOR_PARENT_TRANSFORM_ALL;
-
-                CCNode p = this;
-                while (p != null && p is CCSprite && p != m_pobBatchNode)
-                {
-                    // Might happen. Issue #1053
-                    // how to implement, we can not use dynamic
-                    // CCAssert( [p isKindOfClass:[CCSprite class]], @"CCSprite should be a CCSprite subclass. Probably you initialized an sprite with a batchnode, but you didn't add it to the batch node." );
-                    transformValues_ tv = new transformValues_();
-                    ((CCSprite)p).getTransformValues(tv);
-
-                    // If any of the parents are not visible, then don't draw this node
-                    if (!tv.visible)
-                    {
-                        m_sQuad.br.vertices = m_sQuad.tl.vertices = m_sQuad.tr.vertices = m_sQuad.bl.vertices = new ccVertex3F(0, 0, 0);
-                        m_pobTextureAtlas.updateQuad(m_sQuad, m_uAtlasIndex);
-                        m_bDirty = m_bRecursiveDirty = false;
-
-                        return;
-                    }
-
-                    CCAffineTransform newMatrix = CCAffineTransform.CCAffineTransformMakeIdentity();
-
-                    // 2nd: Translate, Skew, Rotate, Scale
-                    if ((int)prevHonor != 0 & (int)ccHonorParentTransform.CC_HONOR_PARENT_TRANSFORM_TRANSLATE != 0)
-                    {
-                        newMatrix = CCAffineTransform.CCAffineTransformTranslate(newMatrix, tv.pos.x, tv.pos.y);
-                    }
-
-                    if ((int)prevHonor != 0 & (int)ccHonorParentTransform.CC_HONOR_PARENT_TRANSFORM_ROTATE != 0)
-                    {
-                        newMatrix = CCAffineTransform.CCAffineTransformRotate(newMatrix, -ccMacros.CC_DEGREES_TO_RADIANS(tv.rotation));
-                    }
-
-                    if ((int)prevHonor != 0 & (int)ccHonorParentTransform.CC_HONOR_PARENT_TRANSFORM_SKEW != 0)
-                    {
-                        CCAffineTransform skew = CCAffineTransform.CCAffineTransformMake(1.0f,
-                            (float)Math.Tan(ccMacros.CC_DEGREES_TO_RADIANS(tv.skew.y)),
-                            (float)Math.Tan(ccMacros.CC_DEGREES_TO_RADIANS(tv.skew.x)), 1.0f, 0.0f, 0.0f);
-                        // apply the skew to the transform
-                        newMatrix = CCAffineTransform.CCAffineTransformConcat(skew, newMatrix);
-                    }
-
-                    if ((int)prevHonor != 0 & (int)ccHonorParentTransform.CC_HONOR_PARENT_TRANSFORM_SCALE != 0)
-                    {
-                        newMatrix = CCAffineTransform.CCAffineTransformScale(newMatrix, tv.scale.x, tv.scale.y);
-                    }
-
-                    // 3rd: Translate anchor point
-                    newMatrix = CCAffineTransform.CCAffineTransformTranslate(newMatrix, -tv.ap.x, -tv.ap.y);
-
-                    // 4th: Matrix multiplication
-                    matrix = CCAffineTransform.CCAffineTransformConcat(matrix, newMatrix);
-
-                    prevHonor = ((CCSprite)p).honorParentTransform;
-
-                    p = p.parent;
-                }
-            }
-
-            //
-            // calculate the Quad based on the Affine Matrix
-            //
-            CCSize size = m_obRectInPixels.size;
-
-            float x1 = m_obOffsetPositionInPixels.x;
-            float y1 = m_obOffsetPositionInPixels.y;
-
-            float x2 = x1 + size.width;
-            float y2 = y1 + size.height;
-            float x = matrix.tx;
-            float y = matrix.ty;
-
-            float cr = matrix.a;
-            float sr = matrix.b;
-            float cr2 = matrix.d;
-            float sr2 = -matrix.c;
-            float ax = x1 * cr - y1 * sr2 + x;
-            float ay = x1 * sr + y1 * cr2 + y;
-
-            float bx = x2 * cr - y1 * sr2 + x;
-            float by = x2 * sr + y1 * cr2 + y;
-
-            float cx = x2 * cr - y2 * sr2 + x;
-            float cy = x2 * sr + y2 * cr2 + y;
-
-            float dx = x1 * cr - y2 * sr2 + x;
-            float dy = x1 * sr + y2 * cr2 + y;
-
-            m_sQuad.bl.vertices = new ccVertex3F((float)ax, (float)ay, m_fVertexZ);
-            m_sQuad.br.vertices = new ccVertex3F((float)bx, (float)by, m_fVertexZ);
-            m_sQuad.tl.vertices = new ccVertex3F((float)dx, (float)dy, m_fVertexZ);
-            m_sQuad.tr.vertices = new ccVertex3F((float)cx, (float)cy, m_fVertexZ);
-
-            m_pobTextureAtlas.updateQuad(m_sQuad, m_uAtlasIndex);
-
-            m_bDirty = m_bRecursiveDirty = false;
+            
         }
 
         /// <summary>
@@ -1123,56 +888,56 @@ namespace CocosFramework
         /// tell the sprite to use batch node render.
         /// @since v0.99.0
         /// </summary>
-        public void useBatchNode(CCSpriteBatchNode batchNode)
-        {
-            m_bUseBatchNode = true;
-            m_pobTextureAtlas = batchNode.TextureAtlas; // weak ref
-            m_pobBatchNode = batchNode;
-        }
+        //public void useBatchNode(CCSpriteBatchNode batchNode)
+        //{
+        //    m_bUseBatchNode = true;
+        //    m_pobTextureAtlas = batchNode.TextureAtlas; // weak ref
+        //    m_pobBatchNode = batchNode;
+        //}
 
         #region Frames
 
         /// <summary>
         /// sets a new display frame to the CCSprite.
         /// </summary>
-        public CCSpriteFrame DisplayFrame
-        {
-            set
-            {
-                m_obUnflippedOffsetPositionFromCenter = value.OffsetInPixels;
+        //public CCSpriteFrame DisplayFrame
+        //{
+        //    set
+        //    {
+        //        m_obUnflippedOffsetPositionFromCenter = value.OffsetInPixels;
 
-                CCTexture2D pNewTexture = value.Texture;
-                // update texture before updating texture rect
-                if (pNewTexture != m_pobTexture)
-                {
-                    this.Texture = pNewTexture;
-                }
+        //        AssetBundle pNewTexture = value.Texture;
+        //        // update texture before updating texture rect
+        //        if (pNewTexture != m_pobTexture)
+        //        {
+        //            this.Texture = pNewTexture;
+        //        }
 
-                // update rect
-                m_bRectRotated = value.IsRotated;
-                setTextureRectInPixels(value.RectInPixels, value.IsRotated, value.OriginalSizeInPixels);
-            }
-            get
-            {
-                return CCSpriteFrame.frameWithTexture(m_pobTexture,
-                                                 m_obRectInPixels,
-                                                 m_bRectRotated,
-                                                 m_obUnflippedOffsetPositionFromCenter,
-                                                 m_tContentSizeInPixels);
-            }
-        }
+        //        // update rect
+        //        m_bRectRotated = value.IsRotated;
+        //        setTextureRectInPixels(value.RectInPixels, value.IsRotated, value.OriginalSizeInPixels);
+        //    }
+        //    get
+        //    {
+        //        return CCSpriteFrame.frameWithTexture(m_pobTexture,
+        //                                         m_obRectInPixels,
+        //                                         m_bRectRotated,
+        //                                         m_obUnflippedOffsetPositionFromCenter,
+        //                                         m_tContentSizeInPixels);
+        //    }
+        //}
 
         /// <summary>
         /// returns whether or not a CCSpriteFrame is being displayed
         /// </summary>
-        public bool isFrameDisplayed(CCSpriteFrame pFrame)
-        {
-            CCRect r = pFrame.Rect;
+        //public bool isFrameDisplayed(CCSpriteFrame pFrame)
+        //{
+        //    CCRect r = pFrame.Rect;
 
-            return (CCRect.CCRectEqualToRect(r, m_obRect) &&
-                pFrame.Texture.Name == m_pobTexture.Name);
-        }
-
+        //    return (CCRect.CCRectEqualToRect(r, m_obRect) &&
+        //        pFrame.Texture.Name == m_pobTexture.Name);
+        //}
+        #endregion
         #endregion
 
         // Animation
@@ -1184,17 +949,17 @@ namespace CocosFramework
         /// </summary>
         public void setDisplayFrameWithAnimationName(string animationName, int frameIndex)
         {
-            Debug.Assert(animationName != null);
+            //Debug.Assert(animationName != null);
 
-            CCAnimation a = CCAnimationCache.sharedAnimationCache().animationByName(animationName);
+            //CCAnimation a = CCAnimationCache.sharedAnimationCache().animationByName(animationName);
 
-            Debug.Assert(a != null);
+            //Debug.Assert(a != null);
 
-            CCSpriteFrame frame = a.getFrames()[frameIndex];
+            //CCSpriteFrame frame = a.getFrames()[frameIndex];
 
-            Debug.Assert(frame != null);
+            //Debug.Assert(frame != null);
 
-            DisplayFrame = frame;
+            //DisplayFrame = frame;
         }
 
         protected void updateTextureCoords(CCRect rect)
@@ -1226,7 +991,7 @@ namespace CocosFramework
         protected bool m_bHasChildren;
 
         // Data used when the sprite is self-rendered
-        protected CCTexture2D m_pobTexture;
+        protected AssetBundle m_pobTexture;
 
         // whether or not it's parent is a CCSpriteBatchNode
         bool m_bUsesBatchNode = false;

@@ -42,7 +42,7 @@ namespace CocosFramework
 
             //paused?
             m_bPaused = false;
-
+            m_fContentScaleFactor = 1;
             //purge?
             m_bPurgeDirecotorInNextLoop = false;
             return true;
@@ -451,6 +451,112 @@ namespace CocosFramework
         public void showProfilers()
         {
 
+        }
+        /// <summary>
+        /// returns the size of the OpenGL view in points.
+        /// It takes into account any possible rotation (device orientation) of the window
+        /// </summary>
+        /// <returns></returns>
+        public CCSize getWinSize()
+        {
+            CCSize s = new CCSize(640,960);//new CCSize(m_obWinSizeInPoints.width, m_obWinSizeInPoints.height);
+
+            //it's different from cocos2d-win32. 
+
+            //if (m_eDeviceOrientation == ccDeviceOrientation.CCDeviceOrientationLandscapeLeft
+            //    || m_eDeviceOrientation == ccDeviceOrientation.CCDeviceOrientationLandscapeRight)
+            //{
+            //    // swap x,y in landspace mode
+            //    CCSize tmp = s;
+            //    s.width = tmp.width;
+            //    s.height = tmp.height;
+            //}
+
+            return s;
+        }
+        public float ContentScaleFactor
+        {
+            get { return m_fContentScaleFactor; }
+            set
+            {
+                if (value != m_fContentScaleFactor)
+                {
+                    m_fContentScaleFactor = value;
+
+                }
+            }
+        }
+        /// <summary>
+        /// converts a UIKit coordinate to an OpenGL coordinate
+        /// Useful to convert (multi) touches coordinates to the current layout (portrait or landscape)
+        /// </summary>
+        public CCPoint convertToGL(CCPoint obPoint)
+        {
+            CCSize s = new CCSize(640, 960);//m_obWinSizeInPoints;
+
+            //this is different from cocos2d-win32
+            return new CCPoint(obPoint.x, s.height - obPoint.y);
+
+            //CCSize s = m_obWinSizeInPoints;
+            //float newY = s.height - obPoint.y;
+            //float newX = s.width - obPoint.x;
+
+            //CCPoint ret = new CCPoint(0, 0);
+            //switch (m_eDeviceOrientation)
+            //{
+            //    case ccDeviceOrientation.CCDeviceOrientationPortrait:
+            //        ret = new CCPoint(obPoint.x, newY);
+            //        break;
+            //    case ccDeviceOrientation.CCDeviceOrientationPortraitUpsideDown:
+            //        ret = new CCPoint(newX, obPoint.y);
+            //        break;
+            //    case ccDeviceOrientation.CCDeviceOrientationLandscapeLeft:
+            //        ret.x = obPoint.y;
+            //        ret.y = obPoint.x;
+            //        break;
+            //    case ccDeviceOrientation.CCDeviceOrientationLandscapeRight:
+            //        ret.x = newY;
+            //        ret.y = newX;
+            //        break;
+            //}
+
+            //return ret;
+        }
+        /// <summary>
+        /// converts an OpenGL coordinate to a UIKit coordinate
+        /// Useful to convert node points to window points for calls such as glScissor
+        /// </summary>
+        /// <param name="obPoint"></param>
+        /// <returns></returns>
+        public CCPoint convertToUI(CCPoint obPoint)
+        {
+            CCSize winSize = new CCSize(640, 960); //m_obWinSizeInPoints;
+
+            //this is different from cocos2d-win32
+            return new CCPoint(obPoint.x, winSize.height - obPoint.y);
+
+            //float oppositeX = winSize.width - obPoint.x;
+            //float oppositeY = winSize.height - obPoint.y;
+            //CCPoint uiPoint = new CCPoint();
+
+            //switch (m_eDeviceOrientation)
+            //{
+            //    case ccDeviceOrientation.CCDeviceOrientationPortrait:
+            //        uiPoint = new CCPoint(obPoint.x, oppositeY);
+            //        break;
+            //    case ccDeviceOrientation.CCDeviceOrientationPortraitUpsideDown:
+            //        uiPoint = new CCPoint(oppositeX, obPoint.y);
+            //        break;
+            //    case ccDeviceOrientation.CCDeviceOrientationLandscapeLeft:
+            //        uiPoint = new CCPoint(obPoint.y, obPoint.x);
+            //        break;
+            //    case ccDeviceOrientation.CCDeviceOrientationLandscapeRight:
+            //        // Can't use oppositeX/Y because x/y are flipped
+            //        uiPoint = new CCPoint(winSize.width - obPoint.y, winSize.height - obPoint.x);
+            //        break;
+            //}
+
+            //return uiPoint;
         }
     }
 }

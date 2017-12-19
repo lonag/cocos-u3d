@@ -462,74 +462,74 @@ namespace CocosFramework
         /// </summary>
         public virtual void visit()
         {
-            Matrix world = CCApplication.sharedApplication().basicEffect.World;
-            // quick return if not visible
-            if (!m_bIsVisible)
-            {
-                return;
-            }
+            //Matrix world = CCApplication.sharedApplication().basicEffect.World;
+            //// quick return if not visible
+            //if (!m_bIsVisible)
+            //{
+            //    return;
+            //}
             
-            m_tCCNodeTransform = Matrix.Identity;
-            Matrix ori = Matrix.Identity * CCApplication.sharedApplication().basicEffect.View;
+            //m_tCCNodeTransform = Matrix.Identity;
+            //Matrix ori = Matrix.Identity * CCApplication.sharedApplication().basicEffect.View;
 
-            if (m_pGrid != null && m_pGrid.Active)
-            {
-                m_pGrid.beforeDraw();
-                this.transformAncestors();
-            }
+            //if (m_pGrid != null && m_pGrid.Active)
+            //{
+            //    m_pGrid.beforeDraw();
+            //    this.transformAncestors();
+            //}
 
-            transform();
+            //transform();
 
-            CCNode node;
-            int i = 0;
+            //CCNode node;
+            //int i = 0;
 
-            if ((m_pChildren != null) && (m_pChildren.Count > 0))
-            {
-                // draw children zOrder < 0
-                for (; i < m_pChildren.Count; ++i)
-                {
-                    node = m_pChildren[i];
-                    if (node != null && node.m_nZOrder < 0)
-                    {
-                        Matrix world2 = CCApplication.sharedApplication().basicEffect.World;
-                        node.visit();
-                        CCApplication.sharedApplication().basicEffect.World = world2;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
+            //if ((m_pChildren != null) && (m_pChildren.Count > 0))
+            //{
+            //    // draw children zOrder < 0
+            //    for (; i < m_pChildren.Count; ++i)
+            //    {
+            //        node = m_pChildren[i];
+            //        if (node != null && node.m_nZOrder < 0)
+            //        {
+            //            Matrix world2 = CCApplication.sharedApplication().basicEffect.World;
+            //            node.visit();
+            //            CCApplication.sharedApplication().basicEffect.World = world2;
+            //        }
+            //        else
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
 
-            // self draw
-            draw();
+            //// self draw
+            //draw();
 
-            // draw children zOrder >= 0
-            if ((m_pChildren != null) && (m_pChildren.Count > 0))
-            {
-                for (; i < m_pChildren.Count; ++i)
-                {
-                    node = m_pChildren[i];
+            //// draw children zOrder >= 0
+            //if ((m_pChildren != null) && (m_pChildren.Count > 0))
+            //{
+            //    for (; i < m_pChildren.Count; ++i)
+            //    {
+            //        node = m_pChildren[i];
 
-                    if (node != null)
-                    {
-                        Matrix world2 = CCApplication.sharedApplication().basicEffect.World;
-                        node.visit();
-                        CCApplication.sharedApplication().basicEffect.World = world2;
-                    }
-                }
-            }
+            //        if (node != null)
+            //        {
+            //            Matrix world2 = CCApplication.sharedApplication().basicEffect.World;
+            //            node.visit();
+            //            CCApplication.sharedApplication().basicEffect.World = world2;
+            //        }
+            //    }
+            //}
 
 
-            if (m_pGrid != null && m_pGrid.Active)
-            {
-                m_pGrid.afterDraw(this);
-            }
+            //if (m_pGrid != null && m_pGrid.Active)
+            //{
+            //    m_pGrid.afterDraw(this);
+            //}
 
-            CCApplication.sharedApplication().basicEffect.World = world; // Matrix.Invert(m_tCCNodeTransform) * CCApplication.sharedApplication().basicEffect.World;
-            CCApplication.sharedApplication().basicEffect.View = ori;
-            CCApplication.sharedApplication().viewMatrix = ori;
+            //CCApplication.sharedApplication().basicEffect.World = world; // Matrix.Invert(m_tCCNodeTransform) * CCApplication.sharedApplication().basicEffect.World;
+            //CCApplication.sharedApplication().basicEffect.View = ori;
+            //CCApplication.sharedApplication().viewMatrix = ori;
         }
 
         /// <summary>
@@ -543,10 +543,10 @@ namespace CocosFramework
                 return;
             }
 
-            if (m_pGrid != null && m_pGrid.Active)
-            {
-                m_pGrid.blit();
-            }
+            //if (m_pGrid != null && m_pGrid.Active)
+            //{
+            //    m_pGrid.blit();
+            //}
         }
 
 
@@ -1469,5 +1469,10 @@ namespace CocosFramework
                 return m_pCamera;
             }
         }
+        protected CCAffineTransform m_tTransform, m_tInverse;
+        //protected Matrix m_tCCNodeTransform, m_tView;
+
+        protected bool m_bIsTransformDirty;
+        protected bool m_bIsInverseDirty;
     }
 }

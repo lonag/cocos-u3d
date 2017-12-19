@@ -57,7 +57,7 @@ namespace CocosFramework
         /// <summary>
         /// gets or sets a new texture. it will be retained
         /// </summary>
-        CCTexture2D Texture { get; set; }
+        //CCTexture2D Texture { get; set; }
     }
 
     public interface ICCLabelProtocol

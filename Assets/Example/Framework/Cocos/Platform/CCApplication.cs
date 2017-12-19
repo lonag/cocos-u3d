@@ -22,14 +22,6 @@ namespace CocosFramework
 
         #region Fields and Construct Method
 
-        //Game game;
-
-        // CCTouch m_pTouch;
-        //internal GraphicsDeviceManager graphics;
-        //protected Rectangle m_rcViewPort;
-        //protected IEGLTouchDelegate m_pDelegate;
-        // List<CCTouch> m_pSet;
-
         protected bool m_bCaptured;
         protected float m_fScreenScaleFactor;
 
@@ -39,12 +31,6 @@ namespace CocosFramework
         public CCApplication()
         {
             
-        }
-
-        void graphics_DeviceCreated(object sender, EventArgs e)
-        {
-            //m_rcViewPort = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
-            //_size = new CCSize(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
         }
 
         #endregion
@@ -116,77 +102,6 @@ namespace CocosFramework
 
         #endregion
 
-        #region Touch Methods
-
-        //public IEGLTouchDelegate TouchDelegate
-        //{
-        //    set { m_pDelegate = value; }
-        //}
-
-        //private void ProcessTouch()
-        //{
-        //    if (m_pDelegate != null)
-        //    {
-        //        TouchCollection touchCollection = TouchPanel.GetState();
-
-        //        List<CCTouch> newTouches = new List<CCTouch>();
-        //        List<CCTouch> movedTouches = new List<CCTouch>();
-        //        List<CCTouch> endedTouches = new List<CCTouch>();
-
-        //        foreach (TouchLocation touch in touchCollection)
-        //        {
-        //            switch (touch.State)
-        //            {
-        //                case TouchLocationState.Pressed:
-        //                    if (m_rcViewPort.Contains((int)touch.Position.X, (int)touch.Position.Y))
-        //                    {
-        //                        m_pTouches.AddLast(new CCTouch(touch.Id, touch.Position.X - m_rcViewPort.Left / m_fScreenScaleFactor, touch.Position.Y - m_rcViewPort.Top / m_fScreenScaleFactor));
-        //                        m_pTouchMap[touch.Id] = m_pTouches.Last;
-        //                        newTouches.Add(m_pTouches.Last.Value);
-        //                    }
-        //                    break;
-
-        //                case TouchLocationState.Moved:
-        //                    if (m_pTouchMap.ContainsKey(touch.Id))
-        //                    {
-        //                        movedTouches.Add(m_pTouchMap[touch.Id].Value);
-        //                        m_pTouchMap[touch.Id].Value.SetTouchInfo(touch.Id,
-        //                            touch.Position.X - m_rcViewPort.Left / m_fScreenScaleFactor,
-        //                            touch.Position.Y - m_rcViewPort.Top / m_fScreenScaleFactor);
-        //                    }
-        //                    break;
-
-        //                case TouchLocationState.Released:
-        //                    if (m_pTouchMap.ContainsKey(touch.Id))
-        //                    {
-        //                        endedTouches.Add(m_pTouchMap[touch.Id].Value);
-        //                        m_pTouches.Remove(m_pTouchMap[touch.Id]);
-        //                        m_pTouchMap.Remove(touch.Id);
-        //                    }
-        //                    break;
-
-        //                default:
-        //                    throw new ArgumentOutOfRangeException();
-        //            }
-
-        //        }
-        //        if (newTouches.Count > 0)
-        //        {
-        //            m_pDelegate.touchesBegan(newTouches, null);
-        //        }
-
-        //        if (movedTouches.Count > 0)
-        //        {
-        //            m_pDelegate.touchesMoved(movedTouches, null);
-        //        }
-
-        //        if (endedTouches.Count > 0)
-        //        {
-        //            m_pDelegate.touchesEnded(endedTouches, null);
-        //        }
-        //    }
-        //}
-
         private CCTouch getTouchBasedOnID(int nID)
         {
             if (m_pTouchMap.ContainsKey(nID))
@@ -204,7 +119,6 @@ namespace CocosFramework
             return null;
         }
 
-        #endregion
 
         /// <summary>
         /// This function change the PVRFrame show/hide setting in register.
@@ -286,10 +200,6 @@ namespace CocosFramework
         //{
 
         //}
-        void Window_OrientationChanged(object sender, EventArgs e)
-        {
-            // throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Get status bar rectangle in EGLView window.
@@ -304,29 +214,6 @@ namespace CocosFramework
         //static ccLanguageType CCApplication::getCurrentLanguage()
         //{
 
-        //}
-
-        /// <summary>
-        /// Gets the current ContentManager
-        /// </summary>
-        //public ContentManager content
-        //{
-        //    get;
-        //    private set;
-        //}
-        //internal SpriteBatch spriteBatch
-        //{
-        //    get;
-        //    private set;
-        //}
-
-        //internal Matrix worldMatrix;
-        //internal Matrix viewMatrix;
-        //internal Matrix projectionMatrix;
-        //internal BasicEffect basicEffect
-        //{
-        //    get;
-        //    private set;
         //}
         
         bool m_bOrientationReverted;

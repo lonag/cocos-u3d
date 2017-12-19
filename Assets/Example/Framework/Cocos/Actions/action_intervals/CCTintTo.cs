@@ -31,7 +31,7 @@ namespace CocosFramework
     */
     public class CCTintTo : CCActionInterval
     {
-        public bool initWithDuration(float duration, byte red, byte green, byte blue)
+        public bool initWithDuration(float duration, float red, float green, float blue)
         {
             if (base.initWithDuration(duration))
             {
@@ -89,7 +89,7 @@ namespace CocosFramework
             }
         }
 
-        public static CCTintTo actionWithDuration(float duration, byte red, byte green, byte blue)
+        public static CCTintTo actionWithDuration(float duration, float red, float green, float blue)
         {
             CCTintTo ret = new CCTintTo();
             ret.initWithDuration(duration, red, green, blue);

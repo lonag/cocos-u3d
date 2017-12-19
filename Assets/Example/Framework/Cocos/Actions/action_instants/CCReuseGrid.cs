@@ -44,10 +44,10 @@ namespace CocosFramework
         {
             base.startWithTarget(pTarget);
 
-            if (m_pTarget.Grid != null && m_pTarget.Grid.Active != null)
-            {
-                m_pTarget.Grid.ReuseGrid = m_pTarget.Grid.ReuseGrid + m_nTimes;
-            }
+            //if (m_pTarget.Grid != null && m_pTarget.Grid.Active != null)
+            //{
+            //    m_pTarget.Grid.ReuseGrid = m_pTarget.Grid.ReuseGrid + m_nTimes;
+            //}
         }
 
         /// <summary>

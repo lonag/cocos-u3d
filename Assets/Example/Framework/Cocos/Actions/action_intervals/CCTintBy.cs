@@ -109,8 +109,8 @@ namespace CocosFramework
         protected short m_deltaG;
         protected short m_deltaB;
 
-        protected short m_fromR;
-        protected short m_fromG;
-        protected short m_fromB;
+        protected float m_fromR;
+        protected float m_fromG;
+        protected float m_fromB;
     }
 }

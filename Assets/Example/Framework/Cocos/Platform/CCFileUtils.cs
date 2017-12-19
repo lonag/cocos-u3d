@@ -50,10 +50,11 @@ namespace CocosFramework
         /// <returns></returns>
         public static string getFileData(string pszFileName, string pszMode, UInt64 pSize)
         {
-            ContentManager content = CCApplication.sharedApplication().content;
-            CCContent data = content.Load<CCContent>(pszFileName);
+            //ContentManager content = CCApplication.sharedApplication().content;
+            //CCContent data = content.Load<CCContent>(pszFileName);
 
-            return data.Content;
+            //return data.Content;
+            return null;
         }
 
         /// <summary>

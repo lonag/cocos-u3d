@@ -87,7 +87,7 @@ namespace CocosFramework
 
         public override void update(float time)
         {
-            ((CCProgressTimer)(m_pTarget)).Percentage = m_fFrom + (m_fTo - m_fFrom) * time;
+            //((CCProgressTimer)(m_pTarget)).Percentage = m_fFrom + (m_fTo - m_fFrom) * time;
         }
 
         /// <summary>

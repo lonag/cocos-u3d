@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-//using Microsoft.Xna.Framework;
+using UnityEngine;
 
 namespace CocosFramework.actions.action_intervals.action_ease
 {
@@ -53,11 +53,11 @@ namespace CocosFramework.actions.action_intervals.action_ease
                 time = time - 1;
                 if (time < 0)
                 {
-                    newT = (float)(-0.5f * Math.Pow(2, 10 * time) * Math.Sin((time - s) * MathHelper.TwoPi/ m_fPeriod));
+                    newT = (float)(-0.5f * Math.Pow(2, 10 * time) * Math.Sin((time - s) * Mathf.PI*2f / m_fPeriod));
                 }
                 else
                 {
-                    newT = (float)(Math.Pow(2, -10 * time) * Math.Sin((time - s) * MathHelper.TwoPi / m_fPeriod) * 0.5f + 1);
+                    newT = (float)(Math.Pow(2, -10 * time) * Math.Sin((time - s) * Mathf.PI * 2f / m_fPeriod) * 0.5f + 1);
                 }
             }
 
