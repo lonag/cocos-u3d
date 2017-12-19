@@ -1,696 +1,266 @@
-/****************************************************************************
-Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2008-2010 Ricardo Quesada
-Copyright (c) 2011      Zynga Inc.
-Copyright (c) 2011-2012 openxlive.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-
-using System;
-using System.Diagnostics;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+using System.IO;
+using CocosFramework;
+//using Uobject = UnityEngine.Object;
 
 namespace CocosFramework
 {
-    /// <summary>
-    /// Whether or not an CCSprite will rotate, scale or translate with it's parent.
-    /// Useful in health bars, when you want that the health bar translates with it's parent but you don't
-    /// want it to rotate with its parent.
-    /// @since v0.99.0
-    /// </summary>
-    public enum ccHonorParentTransform
-    {
-        //! Translate with it's parent
-        CC_HONOR_PARENT_TRANSFORM_TRANSLATE = 1 << 0,
-        //! Rotate with it's parent
-        CC_HONOR_PARENT_TRANSFORM_ROTATE = 1 << 1,
-        //! Scale with it's parent
-        CC_HONOR_PARENT_TRANSFORM_SCALE = 1 << 2,
-        //! Skew with it's parent
-        CC_HONOR_PARENT_TRANSFORM_SKEW = 1 << 3,
+    public class LuaFunction {
 
-        //! All possible transformation enabled. Default value.
-        CC_HONOR_PARENT_TRANSFORM_ALL = CC_HONOR_PARENT_TRANSFORM_TRANSLATE | CC_HONOR_PARENT_TRANSFORM_ROTATE | CC_HONOR_PARENT_TRANSFORM_SCALE | CC_HONOR_PARENT_TRANSFORM_SKEW,
-    }
+    } 
 
-    /** CCSprite is a 2d image ( http://en.wikipedia.org/wiki/Sprite_(computer_graphics) )
-    *
-    * CCSprite can be created with an image, or with a sub-rectangle of an image.
-    *
-    * If the parent or any of its ancestors is a CCSpriteBatchNode then the following features/limitations are valid
-    *   - Features when the parent is a CCBatchNode:
-    *       - MUCH faster rendering, specially if the CCSpriteBatchNode has many children. All the children will be drawn in a single batch.
-    *
-    *   - Limitations
-    *       - Camera is not supported yet (eg: CCOrbitCamera action doesn't work)
-    *       - GridBase actions are not supported (eg: CCLens, CCRipple, CCTwirl)
-    *       - The Alias/Antialias property belongs to CCSpriteBatchNode, so you can't individually set the aliased property.
-    *       - The Blending function property belongs to CCSpriteBatchNode, so you can't individually set the blending function property.
-    *       - Parallax scroller is not supported, but can be simulated with a "proxy" sprite.
-    *
-    *  If the parent is an standard CCNode, then CCSprite behaves like any other CCNode:
-    *    - It supports blending functions
-    *    - It supports aliasing / antialiasing
-    *    - But the rendering will be slower: 1 draw per children.
-    *
-    * The default anchorPoint in CCSprite is (0.5, 0.5).
-    */
-    public class CCSprite : CCNode, ICCTextureProtocol, ICCRGBAProtocol
-    {
-        #region Properties
+    public class CCSprite : CCNode {
+        // image is flipped
+        protected bool m_bFlipX;
+        protected bool m_bFlipY;
 
-        private byte m_nOpacity;
-        /// <summary>
-        /// Opacity: conforms to CCRGBAProtocol protocol
-        /// </summary>
-        public byte Opacity
+        public static CCSprite create()
         {
-            get { return m_nOpacity; }
-            set
-            {
-                m_nOpacity = value;
-
-                // special opacity for premultiplied textures
-                if (m_bOpacityModifyRGB)
-                {
-                    Color = m_sColorUnmodified;
-                }
-
-                updateColor();
-            }
-        }
-
-        private ccColor3B m_sColor = new ccColor3B();
-        /// <summary>
-        /// Color: conforms with CCRGBAProtocol protocol
-        /// </summary>
-        public ccColor3B Color
-        {
-            get
-            {
-                if (m_bOpacityModifyRGB)
-                {
-                    return m_sColorUnmodified;
-                }
-
-                return m_sColor;
-            }
-            set
-            {
-                m_sColor = new ccColor3B(value.r, value.g, value.b);
-                m_sColorUnmodified = new ccColor3B(value.r, value.g, value.b);
-
-                if (m_bOpacityModifyRGB)
-                {
-                    m_sColor.r = (byte)(value.r * m_nOpacity / 255);
-                    m_sColor.g = (byte)(value.g * m_nOpacity / 255);
-                    m_sColor.b = (byte)(value.b * m_nOpacity / 255);
-                }
-
-                updateColor();
-            }
-        }
-
-        /// <summary>
-        /// opacity: conforms to CCRGBAProtocol protocol
-        /// </summary>
-        public virtual bool IsOpacityModifyRGB
-        {
-            get
-            {
-                return m_bOpacityModifyRGB;
-            }
-            set
-            {
-                ccColor3B oldColor = m_sColor;
-                m_bOpacityModifyRGB = value;
-                m_sColor = oldColor;
-            }
-        }
-
-        private bool m_bDirty;
-        /// <summary>
-        /// whether or not the Sprite needs to be updated in the Atlas
-        /// </summary>
-        public bool dirty
-        {
-            get
-            {
-                return m_bDirty;
-            }
-            set
-            {
-                m_bDirty = value;
-            }
-        }
-
-        private ccV3F_C4B_T2F_Quad m_sQuad = new ccV3F_C4B_T2F_Quad();
-        /// <summary>
-        /// get the quad (tex coords, vertex coords and color) information
-        /// </summary>
-        public ccV3F_C4B_T2F_Quad quad
-        {
-            // read only
-            get
-            {
-                return m_sQuad;
-            }
-        }
-
-        private bool m_bRectRotated;
-        /// <summary>
-        /// returns whether or not the texture rectangle is rotated
-        /// </summary>
-        public bool rectRotated
-        {
-            get { return m_bRectRotated; }
-        }
-
-        private int m_uAtlasIndex;
-        /// <summary>
-        /// The index used on the TextureAtlas. Don't modify this value unless you know what you are doing
-        /// </summary>
-        public int atlasIndex
-        {
-            get
-            {
-                return m_uAtlasIndex;
-            }
-            set
-            {
-                m_uAtlasIndex = value;
-            }
-        }
-
-        private CCRect m_obTextureRect;
-        /// <summary>
-        /// returns the rect of the CCSprite in points
-        /// </summary>
-        public CCRect textureRect
-        {
-            // read only
-            get { return m_obTextureRect; }
-        }
-
-        /// <summary>
-        /// whether or not the Sprite is rendered using a CCSpriteBatchNode
-        /// </summary>
-        private bool m_bUseBatchNode;
-        public bool IsUseBatchNode
-        {
-            get
-            {
-                return m_bUseBatchNode;
-            }
-            set
-            {
-                m_bUseBatchNode = value;
-            }
-        }
-
-        /** conforms to CCTextureProtocol protocol */
-        private ccBlendFunc m_sBlendFunc = new ccBlendFunc();
-        public ccBlendFunc BlendFunc
-        {
-            get { return m_sBlendFunc; }
-            set { m_sBlendFunc = value; }
-        }
-
-        //protected CCTextureAtlas m_pobTextureAtlas;
-        //protected CCSpriteBatchNode m_pobBatchNode;
-
-        /** weak reference of the CCTextureAtlas used when the sprite is rendered using a CCSpriteBatchNode */
-        ///@todo add m_pobTextureAtlas
-        ///
-
-        /** weak reference to the CCSpriteBatchNode that renders the CCSprite */
-        ///@todo add m_pobBatchNode
-        ///
-
-        private ccHonorParentTransform m_eHonorParentTransform;
-        /// <summary>
-        /// whether or not to transform according to its parent transfomrations.
-        /// Useful for health bars. eg: Don't rotate the health bar, even if the parent rotates.
-        /// IMPORTANT: Only valid if it is rendered using an CCSpriteBatchNode.
-        /// @since v0.99.0
-        /// </summary>
-        public ccHonorParentTransform honorParentTransform
-        {
-            get { return m_eHonorParentTransform; }
-            set { m_eHonorParentTransform = value; }
-        }
-
-        /// <summary>
-        /// Gets offset position in pixels of the sprite in points. Calculated automatically by editors like Zwoptex.
-        /// @since v0.99.0
-        /// </summary>
-        private CCPoint m_obOffsetPositionInPixels;
-        public CCPoint offsetPositionInPixels
-        {
-            // read only
-            get { return m_obOffsetPositionInPixels; }
-        }
-
-        #endregion
-
-        public CCSprite()
-        {
-            m_obOffsetPositionInPixels = new CCPoint();
-            m_obRectInPixels = new CCRect();
-            m_obUnflippedOffsetPositionFromCenter = new CCPoint();
-        }
-
-        #region spriteWith:AssetBundle,CCSpriteFrame,File,BatchNode
-
-        /// <summary>
-        /// Creates an sprite with a texture.
-        /// The rect used will be the size of the texture.
-        /// The offset will be (0,0).
-        /// </summary>
-        public static CCSprite spriteWithTexture(AssetBundle texture)
-        {
+            //
             CCSprite sprite = new CCSprite();
-            if (sprite != null && sprite.initWithTexture(texture))
+            if (sprite.init())
             {
+                // sprite.autorelease();
                 return sprite;
             }
-
-            sprite = null;
+            // CC_SAFE_DELETE(sprite);
             return null;
         }
 
-        /// <summary>
-        /// Creates an sprite with a texture and a rect.
-        /// The offset will be (0,0).
-        /// </summary>
-        public static CCSprite spriteWithBundle(AssetBundle texture, CCRect rect)
+        public static CCSprite create(string modelPath)
         {
+            // CCASSERT(modelPath.length() >= 4, "invalid filename for Sprite");
+            
             CCSprite sprite = new CCSprite();
-            if (sprite != null && sprite.initWithTexture(texture, rect))
+            if (sprite.initWithFile(modelPath))
             {
+                // sprite._contentSize = sprite.getBoundingBox().size;
+                // sprite.autorelease();
                 return sprite;
             }
-
-            sprite = null;
+            // CC_SAFE_DELETE(sprite);
             return null;
         }
 
-        /// <summary>
-        /// Creates an sprite with a texture, a rect and offset. 
-        /// </summary>
-        public static CCSprite spriteWithTexture(AssetBundle texture, CCRect rect, CCPoint offset)
+        public static CCSprite create(string modelPath, string texturePath)
         {
-            // not implement
-            return null;
-        }
-
-        /// <summary>
-        /// Creates an sprite with an image filename.
-        /// The rect used will be the size of the image.
-        /// The offset will be (0,0).
-        /// </summary>
-        public static CCSprite spriteWithFile(string fileName)
-        {
-            CCSprite sprite = new CCSprite();
-            if (sprite.initWithFile(fileName))
+            CCSprite sprite = create(modelPath);
+            if (sprite != null)
             {
-                return sprite;
+                //sprite.setTexture(texturePath);
             }
-
-            sprite = null;
+            
             return sprite;
         }
 
-        /// <summary>
-        /// Creates an sprite with an image filename and a rect.
-        /// The offset will be (0,0).
-        /// </summary>
-        public static CCSprite spriteWithFile(string fileName, CCRect rect)
+        public void createAsync(string modelPath, LuaFunction callback, object[] callbackparam)
         {
-            CCSprite sprite = new CCSprite();
-
-            if (sprite.initWithFile(fileName, rect))
-            {
-                return sprite;
-            }
-
-            sprite = null;
-            return sprite;
+            createAsync(modelPath, "", callback, callbackparam);
         }
 
-        /// <summary>
-        /// Creates an sprite with an CCBatchNode and a rect 
-        /// </summary>
-        //public static CCSprite spriteWithBatchNode(CCSpriteBatchNode batchNode, CCRect rect)
+        public void createAsync(string modelPath, string texturePath, LuaFunction callback, object[] callbackparam)
+        {
+            // Sprite *sprite = new Sprite();
+            // if (sprite.loadFromCache(modelPath))
+            // {
+            //     sprite.autorelease();
+            //     if (!texturePath.empty())
+            //         sprite.setTexture(texturePath);
+            //     callback(sprite, callbackparam);
+            //     return;
+            // }
+            
+            // sprite._asyncLoadParam.afterLoadCallback = callback;
+            // sprite._asyncLoadParam.texPath = texturePath;
+            // sprite._asyncLoadParam.modlePath = modelPath;
+            // sprite._asyncLoadParam.callbackParam = callbackparam;
+            // sprite._asyncLoadParam.materialdatas = new (std::nothrow) MaterialDatas();
+            // sprite._asyncLoadParam.meshdatas = new (std::nothrow) MeshDatas();
+            // sprite._asyncLoadParam.nodeDatas = new (std::nothrow) NodeDatas();
+            // AsyncTaskPool::getInstance().enqueue(AsyncTaskPool::TaskType::TASK_IO, CC_CALLBACK_1(Sprite::afterAsyncLoad, sprite), (void*)(&sprite._asyncLoadParam), [sprite]()
+            // {
+            //     sprite._asyncLoadParam.result = sprite.loadFromFile(sprite._asyncLoadParam.modlePath, sprite._asyncLoadParam.nodeDatas, sprite._asyncLoadParam.meshdatas, sprite._asyncLoadParam.materialdatas);
+            // });
+            
+        }
+
+        public void afterAsyncLoad(object[] param)
+        {
+            // AsyncLoadParam* asyncParam = (Sprite::AsyncLoadParam*)param;
+            // autorelease();
+            // if (asyncParam)
+            // {
+            //     if (asyncParam.result)
+            //     {
+            //         _meshes.clear();
+            //         _meshVertexDatas.clear();
+            //         CC_SAFE_RELEASE_NULL(_skeleton);
+            //         removeAllAttachNode();
+                    
+            //         //create in the main thread
+            //         auto& meshdatas = asyncParam.meshdatas;
+            //         auto& materialdatas = asyncParam.materialdatas;
+            //         auto&   nodeDatas = asyncParam.nodeDatas;
+            //         if (initFrom(*nodeDatas, *meshdatas, *materialdatas))
+            //         {
+            //             auto spritedata = getInstance().getSpriteData(asyncParam.modlePath);
+            //             if (spritedata == null)
+            //             {
+            //                 //add to cache
+            //                 auto data = new (std::nothrow) SpriteData();
+            //                 data.materialdatas = materialdatas;
+            //                 data.nodedatas = nodeDatas;
+            //                 data.meshVertexDatas = _meshVertexDatas;
+            //                 for (const auto mesh : _meshes) {
+            //                     data.glProgramStates.pushBack(mesh.getGLProgramState());
+            //                 }
+                            
+            //                 getInstance().addSpriteData(asyncParam.modlePath, data);
+                            
+            //                 CC_SAFE_DELETE(meshdatas);
+            //                 materialdatas = null;
+            //                 nodeDatas = null;
+            //             }
+            //         }
+            //         CC_SAFE_DELETE(meshdatas);
+            //         CC_SAFE_DELETE(materialdatas);
+            //         CC_SAFE_DELETE(nodeDatas);
+                    
+            //         if (asyncParam.texPath != "")
+            //         {
+            //             setTexture(asyncParam.texPath);
+            //         }
+            //     }
+            //     else
+            //     {
+            //         CCLOG("file load failed: %s ", asyncParam.modlePath.c_str());
+            //     }
+            //     asyncParam.afterLoadCallback(this, asyncParam.callbackParam);
+            // }
+        }
+
+        bool loadFromCache(string path)
+        {
+            
+            return false;
+        }
+
+        bool loadFromFile(string path)
+        {
+            return false;
+        }
+
+        // Sprite::Sprite()
+        // : _skeleton(null)
+        // , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
+        // , _aabbDirty(true)
+        // , _lightMask(-1)
+        // , _shaderUsingLight(false)
+        // , _forceDepthWrite(false)
+        // , _usingAutogeneratedGLProgram(true)
+        // {
+        // }
+
+        // Sprite::~Sprite()
+        // {
+        //     _meshes.clear();
+        //     _meshVertexDatas.clear();
+        //     CC_SAFE_RELEASE_NULL(_skeleton);
+        //     removeAllAttachNode();
+        // }
+
+        public bool init()
+        {
+            // if(Node::init())
+            // {
+            //     return true;
+            // }
+            return false;
+        }
+
+        bool initWithFile(string path)
+        {
+            return false;
+        }
+
+        public static Sprite createSpriteNode()
+        {
+           return null;
+        }
+
+        //public void setMaterial(Material *material)
         //{
-        //    CCSprite pobSprite = new CCSprite();
-        //    if (pobSprite.initWithBatchNode(batchNode, rect))
-        //    {
-        //        return pobSprite;
-        //    }
-
-        //    return null;
+        //    setMaterial(material, -1); 
         //}
 
-        #endregion
+        //public void setMaterial(Material *material, int meshIndex)
+        //{
+        //    // CCASSERT(material, "Invalid Material");
+        //    // CCASSERT(meshIndex == -1 || (meshIndex >=0 && meshIndex < _meshes.size()), "Invalid meshIndex");
 
-        public virtual bool init()
+
+        //    if (meshIndex == -1)
+        //    {
+        //        for (ssize_t i = 0; i < _meshes.size(); i++)
+        //        {
+        //            _meshes.at(i).setMaterial(i == 0 ? material : material.clone());
+        //        }
+        //    }
+        //    else
+        //    {
+        //        auto mesh = _meshes.at(meshIndex);
+        //        mesh.setMaterial(material);
+        //    }
+
+        //    _usingAutogeneratedGLProgram = false;
+        //}
+
+        //// Material* getMaterial(int meshIndex) const
+        //// {
+        ////     CCASSERT(meshIndex >=0 && meshIndex < _meshes.size(), "Invalid meshIndex");
+        ////     return _meshes.at(meshIndex).getMaterial();
+        //// }
+
+
+        //public void genMaterial(bool useLight)
+        //{
+            
+        //}
+
+
+        //public void  addMesh(Mesh* mesh)
+        //{
+
+        //}
+
+        // public void setTexture(string texFile)
+        // {
+        //     auto tex = Director::getInstance().getTextureCache().addImage(texFile);
+        //     setTexture(tex);
+        // }
+
+        // public void setTexture(Texture2D* texture)
+        // {
+        //     for (auto mesh: _meshes) {
+        //         mesh.setTexture(texture);
+        //     }
+        // }
+
+        CCAction runAction(CCAction action)
         {
-            m_bDirty = m_bRecursiveDirty = false;
-
-            // by default use "Self Render".
-            // if the sprite is added to an batchnode, then it will automatically switch to "SpriteSheet Render"
-            useSelfRender();
-
-            m_bOpacityModifyRGB = true;
-            m_nOpacity = 255;
-            m_sColor = new ccColor3B(255, 255, 255);
-            m_sColorUnmodified = new ccColor3B(255, 255, 255);
-
-            m_sBlendFunc = new ccBlendFunc();
-            //m_sBlendFunc.src = ccMacros.CC_BLEND_SRC;
-            //m_sBlendFunc.dst = ccMacros.CC_BLEND_DST;
-
-
-            // update texture (calls updateBlendFunc)
-            Texture = null;
-
-            // clean the Quad
-            m_sQuad = new ccV3F_C4B_T2F_Quad();
-
-            m_bFlipX = m_bFlipY = false;
-
-            // default transform anchor: center
-            anchorPoint = (CCPointExtension.ccp(0.5f, 0.5f));
-
-            // zwoptex default values
-            m_obOffsetPositionInPixels = new CCPoint();
-
-            m_eHonorParentTransform = ccHonorParentTransform.CC_HONOR_PARENT_TRANSFORM_ALL;
-            m_bHasChildren = false;
-
-            // Atlas: Color
-            ccColor4B tmpColor = new ccColor4B(255, 255, 255, 255);
-            m_sQuad.bl.colors = tmpColor;
-            m_sQuad.br.colors = tmpColor;
-            m_sQuad.tl.colors = tmpColor;
-            m_sQuad.tr.colors = tmpColor;
-
-            // Atlas: Vertex
-
-            // updated in "useSelfRender"
-
-            // Atlas: TexCoords
-
-            setTextureRectInPixels(new CCRect(), false, new CCSize());
-
-            return true;
+            //setForceDepthWrite(true);
+            return base.runAction(action);
         }
 
-        public override void draw()
-        {
-            base.draw();
-        }
-
-        #region add,remove child
-
-        public override void removeChild(CCNode child, bool cleanup)
-        {
-            if (m_bUseBatchNode)
-            {
-                //m_pobBatchNode.removeSpriteFromAtlas((CCSprite)(child));
-            }
-
-            base.removeChild(child, cleanup);
-        }
-
-        public override void removeAllChildrenWithCleanup(bool cleanup)
-        {
-            if (m_bUseBatchNode)
-            {
-                foreach (CCNode node in m_pChildren)
-                {
-                    //m_pobBatchNode.removeSpriteFromAtlas((CCSprite)(node));
-                }
-            }
-
-            base.removeAllChildrenWithCleanup(cleanup);
-
-            m_bHasChildren = false;
-        }
-
-        public override void reorderChild(CCNode child, int zOrder)
-        {
-            //Debug.Assert(child != null);
-            //Debug.Assert(m_pChildren.Contains(child));
-
-            if (zOrder == child.zOrder)
-            {
-                return;
-            }
-
-            if (m_bUseBatchNode)
-            {
-                // XXX: Instead of removing/adding, it is more efficient to reorder manually
-                removeChild(child, false);
-                addChild(child, zOrder);
-            }
-            else
-            {
-                base.reorderChild(child, zOrder);
-            }
-        }
-
-        public override void addChild(CCNode child)
-        {
-            base.addChild(child);
-        }
-
-        public override void addChild(CCNode child, int zOrder)
-        {
-            base.addChild(child, zOrder);
-        }
-
-        public override void addChild(CCNode child, int zOrder, int tag)
-        {
-            //Debug.Assert(child != null);
-
-            //base.addChild(child, zOrder, tag);
-
-            //if (m_bUseBatchNode)
-            //{
-            //    Debug.Assert(((CCSprite)child).Texture.Name == m_pobTextureAtlas.Texture.Name);
-            //    int index = m_pobBatchNode.atlasIndexForChild((CCSprite)child, zOrder);
-            //    m_pobBatchNode.insertChild((CCSprite)child, index);
-            //}
-
-            //m_bHasChildren = true;
-        }
-
-        #endregion
-
-        #region override prpperty
-
-        public virtual void setDirtyRecursively(bool bValue)
-        {
-            m_bDirty = m_bRecursiveDirty = bValue;
-            // recursively set dirty
-            if (m_bHasChildren)
-            {
-                foreach (CCNode child in m_pChildren)
-                {
-                    ((CCSprite)child).setDirtyRecursively(true);
-                }
-            }
-        }
-
-        private void SET_DIRTY_RECURSIVELY()
-        {
-            if (m_bUseBatchNode)
-            {
-                m_bDirty = m_bRecursiveDirty = true;
-                if (m_bHasChildren)
-                {
-                    setDirtyRecursively(true);
-                }
-            }
-        }
-
-        public override CCPoint position
-        {
-            get
-            {
-                return base.position;
-            }
-            set
-            {
-                base.position = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override CCPoint positionInPixels
-        {
-            get
-            {
-                return base.positionInPixels;
-            }
-            set
-            {
-                base.positionInPixels = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override float rotation
-        {
-            get
-            {
-                return base.rotation;
-            }
-            set
-            {
-                base.rotation = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override float skewX
-        {
-            get
-            {
-                return base.skewX;
-            }
-            set
-            {
-                base.skewX = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override float skewY
-        {
-            get
-            {
-                return base.skewY;
-            }
-            set
-            {
-                base.skewY = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override float scaleX
-        {
-            get
-            {
-                return base.scaleX;
-            }
-            set
-            {
-                base.scaleX = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override float scaleY
-        {
-            get
-            {
-                return base.scaleY;
-            }
-            set
-            {
-                base.scaleY = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override float scale
-        {
-            get
-            {
-                return base.scale;
-            }
-            set
-            {
-                base.scale = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override float vertexZ
-        {
-            get
-            {
-                return base.vertexZ;
-            }
-            set
-            {
-                base.vertexZ = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override CCPoint anchorPoint
-        {
-            get
-            {
-                return base.anchorPoint;
-            }
-            set
-            {
-                base.anchorPoint = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override bool isRelativeAnchorPoint
-        {
-            get
-            {
-                return base.isRelativeAnchorPoint;
-            }
-            set
-            {
-                base.isRelativeAnchorPoint = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        public override bool visible
-        {
-            get
-            {
-                return base.visible;
-            }
-            set
-            {
-                base.visible = value;
-                SET_DIRTY_RECURSIVELY();
-            }
-        }
-
-        #endregion
-
+        // Rect getBoundingBox() const
+        // {
+        //     AABB aabb = getAABB();
+        //     Rect ret(aabb._min.x, aabb._min.y, (aabb._max.x - aabb._min.x), (aabb._max.y - aabb._min.y));
+        //     return ret;
+        // }
         /// <summary>
         /// whether or not the sprite is flipped horizontally. 
         /// It only flips the texture of the sprite, and not the texture of the sprite's children.
@@ -705,7 +275,7 @@ namespace CocosFramework
                 if (m_bFlipX != value)
                 {
                     m_bFlipX = value;
-                    setTextureRectInPixels(m_obRectInPixels, m_bRectRotated, m_tContentSizeInPixels);
+                    //setTextureRectInPixels(m_obRectInPixels, m_bRectRotated, m_tContentSizeInPixels);
                 }
             }
             get { return m_bFlipX; }
@@ -725,308 +295,94 @@ namespace CocosFramework
                 if (m_bFlipY != value)
                 {
                     m_bFlipY = value;
-                    setTextureRectInPixels(m_obRectInPixels, m_bRectRotated, m_tContentSizeInPixels);
+                    //setTextureRectInPixels(m_obRectInPixels, m_bRectRotated, m_tContentSizeInPixels);
                 }
             }
             get { return m_bFlipY; }
         }
-
-        void updateColor()
-        {
-            m_sQuad.bl.colors = new ccColor4B(m_sColor.r, m_sColor.g, m_sColor.b, m_nOpacity);
-            m_sQuad.br.colors = new ccColor4B(m_sColor.r, m_sColor.g, m_sColor.b, m_nOpacity);
-            m_sQuad.tl.colors = new ccColor4B(m_sColor.r, m_sColor.g, m_sColor.b, m_nOpacity);
-            m_sQuad.tr.colors = new ccColor4B(m_sColor.r, m_sColor.g, m_sColor.b, m_nOpacity);
-
-            // renders using Sprite Manager
-            if (m_bUseBatchNode)
-            {
-                if (m_uAtlasIndex != ccMacros.CCSpriteIndexNotInitialized)
-                {
-                    //m_pobTextureAtlas.updateQuad(m_sQuad, m_uAtlasIndex);
-                }
-                else
-                {
-                    // no need to set it recursively
-                    // update dirty_, don't update recursiveDirty_
-                    m_bDirty = true;
-                }
-            }
-
-            // self render
-            // do nothing
-        }
-
-        // CCTextureProtocol
-        public virtual AssetBundle Texture
-        {
-            set
-            {
-                //Debug.Assert(!m_bUseBatchNode, "CCSprite: setTexture doesn't work when the sprite is rendered using a CCSpriteBatchNode");
-
-                m_pobTexture = value;
-
-                updateBlendFunc();
-            }
-            get { return m_pobTexture; }
-        }
-
-        #region initWith: Texture,File,SpriteFrame,BatchNode
-
-        /// <summary>
-        /// Initializes an sprite with a texture.
-        /// The rect used will be the size of the texture.
-        /// The offset will be (0,0).
-        /// </summary>
-        public bool initWithTexture(AssetBundle texture)
-        {
-            //if (texture == null)
-            //{
-            //    throw (new ArgumentNullException("texture", "Texture cannot be null"));
-            //}
-
-            //CCRect rect = new CCRect();
-            //rect.size = texture.getContentSize();
-
-            //return initWithTexture(texture, rect);¡¢
-            return false;
-        }
-
-        /// <summary>
-        /// Initializes an sprite with a texture and a rect.
-        /// The offset will be (0,0).
-        /// </summary>
-        public bool initWithTexture(AssetBundle texture, CCRect rect)
-        {
-            if (texture == null)
-            {
-                throw (new ArgumentNullException("texture", "Texture cannot be null"));
-            }
-            init();
-            Texture = texture;
-            setTextureRect(rect);
-
-            return true;
-        }
-
-       
         
-        /// <summary>
-        /// Initializes an sprite with an image filename.
-        /// The rect used will be the size of the image.
-        /// The offset will be (0,0).
-        /// </summary>
-        public bool initWithFile(string fileName)
+    }
+    
+
+    public class SpriteCache {
+        public class SpriteData {
+
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////
+        protected static SpriteCache _cacheInstance;
+        protected Dictionary<string, SpriteData> _spriteDatas;
+        public static SpriteCache getInstance()
         {
-            //Debug.Assert(null != fileName, "fileName is null");
-
-            //AssetBundle textureFromFile = CCTextureCache.sharedTextureCache().addImage(fileName);
-
-            //if (null != textureFromFile)
+            if (_cacheInstance == null)
+                _cacheInstance = new SpriteCache();
+            return _cacheInstance;
+        }
+        public void destroyInstance()
+        {
+            //if (_cacheInstance )
             //{
-            //    CCRect rect = new CCRect();
-            //    rect.size = textureFromFile.getContentSize();
-            //    return initWithTexture(textureFromFile, rect);
+            //    delete _cacheInstance;
+            //    _cacheInstance = null;
             //}
+            _cacheInstance = null;
+        }
 
+        public SpriteData getSpriteData(string key)
+        {
+            //object it = _spriteDatas.find(key);
+            //if (it != _spriteDatas.end())
+            //    return it.second;
+            return null;
+        }
+
+        public bool addSpriteData(string key, SpriteData spritedata)
+        {
+            // object it = _spriteDatas.find(key);
+            // if (it == _spriteDatas.end())
+            // {
+            //     _spriteDatas[key] = spritedata;
+            //     return true;
+            // }
             return false;
         }
 
-        /// <summary>
-        /// Initializes an sprite with an image filename, and a rect.
-        /// The offset will be (0,0).
-        /// </summary>
-        public bool initWithFile(string fileName, CCRect rect)
+        public void removeSpriteData(string key)
         {
-            //Debug.Assert(fileName != null);
-
-            //AssetBundle pTexture = CCTextureCache.sharedTextureCache().addImage(fileName);
-            //if (pTexture != null)
+            //if (key == null)
             //{
-            //    return initWithTexture(pTexture, rect);
+            //    return;
             //}
 
-            // don't release here.
-            // when load texture failed, it's better to get a "transparent" sprite then a crashed program
-            // this->release(); 
-            return false;
+            //string key = null;
+            //foreach (KeyValuePair<string, SpriteData> kvp in _spriteDatas)
+            //{
+            //    if (kvp.Key == key)
+            //    {
+            //        key = kvp.Key;
+            //        break;
+            //    }
+            //}
+            //if (key != null)
+            //{
+            //    bundles.Remove(key);
+            //}
+
         }
 
-        public void updateTransform()
+        public void removeAllSpriteData()
         {
+            _spriteDatas.Clear();
+        }
+
+        // SpriteCache()
+        // {
             
-        }
-
-        /// <summary>
-        /// tell the sprite to use self-render.
-        /// @since v0.99.0
-        /// </summary>
-        public void useSelfRender()
-        {
-
-        }
-
-        /// <summary>
-        /// updates the texture rect of the CCSprite in points.
-        /// </summary>
-        public void setTextureRect(CCRect rect)
-        {
-            CCRect rectInPixels = ccMacros.CC_RECT_POINTS_TO_PIXELS(rect);
-            m_obTextureRect = rect;
-            setTextureRectInPixels(rectInPixels, false, rectInPixels.size);
-        }
-
-        /// <summary>
-        /// updates the texture rect, rectRotated and untrimmed size of the CCSprite in pixels
-        /// </summary>
-        public void setTextureRectInPixels(CCRect rect, bool rotated, CCSize size)
-        {
-            
-        }
-
-        /// <summary>
-        /// tell the sprite to use batch node render.
-        /// @since v0.99.0
-        /// </summary>
-        //public void useBatchNode(CCSpriteBatchNode batchNode)
-        //{
-        //    m_bUseBatchNode = true;
-        //    m_pobTextureAtlas = batchNode.TextureAtlas; // weak ref
-        //    m_pobBatchNode = batchNode;
-        //}
-
-        #region Frames
-
-        /// <summary>
-        /// sets a new display frame to the CCSprite.
-        /// </summary>
-        //public CCSpriteFrame DisplayFrame
-        //{
-        //    set
-        //    {
-        //        m_obUnflippedOffsetPositionFromCenter = value.OffsetInPixels;
-
-        //        AssetBundle pNewTexture = value.Texture;
-        //        // update texture before updating texture rect
-        //        if (pNewTexture != m_pobTexture)
-        //        {
-        //            this.Texture = pNewTexture;
-        //        }
-
-        //        // update rect
-        //        m_bRectRotated = value.IsRotated;
-        //        setTextureRectInPixels(value.RectInPixels, value.IsRotated, value.OriginalSizeInPixels);
-        //    }
-        //    get
-        //    {
-        //        return CCSpriteFrame.frameWithTexture(m_pobTexture,
-        //                                         m_obRectInPixels,
-        //                                         m_bRectRotated,
-        //                                         m_obUnflippedOffsetPositionFromCenter,
-        //                                         m_tContentSizeInPixels);
-        //    }
-        //}
-
-        /// <summary>
-        /// returns whether or not a CCSpriteFrame is being displayed
-        /// </summary>
-        //public bool isFrameDisplayed(CCSpriteFrame pFrame)
-        //{
-        //    CCRect r = pFrame.Rect;
-
-        //    return (CCRect.CCRectEqualToRect(r, m_obRect) &&
-        //        pFrame.Texture.Name == m_pobTexture.Name);
-        //}
-        #endregion
-        #endregion
-
-        // Animation
-
-        /// <summary>
-        /// changes the display frame with animation name and index.
-        /// The animation name will be get from the CCAnimationCache
-        /// @since v0.99.5
-        /// </summary>
-        public void setDisplayFrameWithAnimationName(string animationName, int frameIndex)
-        {
-            //Debug.Assert(animationName != null);
-
-            //CCAnimation a = CCAnimationCache.sharedAnimationCache().animationByName(animationName);
-
-            //Debug.Assert(a != null);
-
-            //CCSpriteFrame frame = a.getFrames()[frameIndex];
-
-            //Debug.Assert(frame != null);
-
-            //DisplayFrame = frame;
-        }
-
-        protected void updateTextureCoords(CCRect rect)
-        {
-            
-        }
-
-        protected void updateBlendFunc()
-        {
-            
-        }
-
-        protected void getTransformValues(transformValues_ tv)
-        {
-            tv.pos = m_tPositionInPixels;
-            tv.scale.x = m_fScaleX;
-            tv.scale.y = m_fScaleY;
-            tv.rotation = m_fRotation;
-            tv.skew.x = m_fSkewX;
-            tv.skew.y = m_fSkewY;
-            tv.ap = m_tAnchorPointInPixels;
-            tv.visible = m_bIsVisible;
-        }
-
-        // Subchildren needs to be updated
-        protected bool m_bRecursiveDirty;
-
-        // optimization to check if it contain children
-        protected bool m_bHasChildren;
-
-        // Data used when the sprite is self-rendered
-        protected AssetBundle m_pobTexture;
-
-        // whether or not it's parent is a CCSpriteBatchNode
-        bool m_bUsesBatchNode = false;
-
-        // texture
-        protected CCRect m_obRect;
-        protected CCRect m_obRectInPixels;
-
-        // Offset Position (used by Zwoptex)
-        protected CCPoint m_obUnflippedOffsetPositionFromCenter;
-
-        // opacity and RGB protocol
-        protected ccColor3B m_sColorUnmodified;
-        protected bool m_bOpacityModifyRGB;
-
-        // image is flipped
-        protected bool m_bFlipX;
-        protected bool m_bFlipY;
+        // }
+        // ~SpriteCache()
+        // {
+        //     removeAllSpriteData();
+        // }
     }
-
-    public class transformValues_
-    {
-        public transformValues_()
-        {
-            this.pos = new CCPoint();
-            this.scale = new CCPoint();
-            this.skew = new CCPoint();
-            this.ap = new CCPoint();
-        }
-
-        public CCPoint pos;  // position  x and y
-        public CCPoint scale;  // scale x and y
-        public float rotation;
-        public CCPoint skew;   // skew x and y
-        public CCPoint ap;     // anchor point in pixels
-        public bool visible;
-    }
+    
 }

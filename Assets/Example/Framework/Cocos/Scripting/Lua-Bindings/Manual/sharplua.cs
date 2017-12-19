@@ -6,7 +6,7 @@ namespace CocosFramework {
 		public MonoPInvokeCallbackAttribute( Type t ) {}
 	}
 
-	class SharpLua {
+	public class SharpLua {
 		public enum var_type {
 			NIL = 0,
 			INTEGER = 1,
@@ -227,32 +227,32 @@ namespace CocosFramework {
 		}
 		public void BeginPreLoad()
         {
-            LuaGetGlobal("package");
-            LuaGetField(-1, "preload");
-            moduleSet = new HashSet<string>();
+            // LuaGetGlobal("package");
+            // LuaGetField(-1, "preload");
+            // moduleSet = new HashSet<string>();
         }
 
         public void EndPreLoad()
         {
-            LuaPop(2);
-            moduleSet = null;
+            // LuaPop(2);
+            // moduleSet = null;
         }
 
         public void AddPreLoad(string name, SharpFunction func, Type type)
         {            
-            if (!preLoadMap.ContainsKey(type))
-            {
-                LuaDLL.tolua_pushcfunction(L, func);
-                LuaSetField(-2, name);
-                preLoadMap[type] = func;
-                string module = type.Namespace;
+            // if (!preLoadMap.ContainsKey(type))
+            // {
+            //     LuaDLL.tolua_pushcfunction(L, func);
+            //     LuaSetField(-2, name);
+            //     preLoadMap[type] = func;
+            //     string module = type.Namespace;
 
-                if (!string.IsNullOrEmpty(module) && !moduleSet.Contains(module))
-                {
-                    LuaDLL.tolua_addpreload(L, module);
-                    moduleSet.Add(module);
-                }
-            }            
+            //     if (!string.IsNullOrEmpty(module) && !moduleSet.Contains(module))
+            //     {
+            //         LuaDLL.tolua_addpreload(L, module);
+            //         moduleSet.Add(module);
+            //     }
+            // }            
         }
 
         public int BeginPreModule(string name)
@@ -271,7 +271,8 @@ namespace CocosFramework {
             //     return top;
             // }
             
-            // throw new LuaException(string.Format("create table {0} fail", name));            
+            // throw new LuaException(string.Format("create table {0} fail", name));           
+            return 0;
         }
 
         public void EndPreModule(int reference)
@@ -318,7 +319,8 @@ namespace CocosFramework {
 //             }
 
 //             LuaSetTop(0);
-//             throw new LuaException(string.Format("create table {0} fail", name));            
+//             throw new LuaException(string.Format("create table {0} fail", name));      
+            return false;
         }
 
         public void EndModule()

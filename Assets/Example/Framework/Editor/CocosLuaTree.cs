@@ -42,7 +42,7 @@ public class CocosLuaTree<T>
         }
     }
 
-    /*public void BreadthFirstTraversal(Action<CocosLuaNode<T>> action)
+    public void BreadthFirstTraversal(Action<CocosLuaNode<T>> action)
     {
         List<CocosLuaNode<T>> root = _root.childs;        
         Queue<CocosLuaNode<T>> queue = new Queue<CocosLuaNode<T>>();
@@ -65,7 +65,7 @@ public class CocosLuaTree<T>
                 }
             }
         }
-    }*/
+    }
 
     public void DepthFirstTraversal(Action<CocosLuaNode<T>> begin, Action<CocosLuaNode<T>> end, CocosLuaNode<T> node)
     {

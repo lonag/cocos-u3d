@@ -31,7 +31,7 @@ namespace CocosFramework
         Dictionary<string, string[]> m_Dependencies = new Dictionary<string, string[]>();
         Dictionary<string, AssetBundleInfo> m_LoadedAssetBundles = new Dictionary<string, AssetBundleInfo>();
         Dictionary<string, List<LoadAssetRequest>> m_LoadRequests = new Dictionary<string, List<LoadAssetRequest>>();
-        class LuaFunction
+        public class LuaFunction
         {
 
         }
@@ -42,16 +42,18 @@ namespace CocosFramework
             public LuaFunction luaFunc;
             public Action<UObject[]> sharpFunc;
         }
-        public void LoadPrefab(string abName, string assetName, Action<UObject[]> func) {
-            LoadAsset<GameObject>(abName, new string[] { assetName }, func);
+        public void LoadPrefabAsync(string abName, string assetName, Action<UObject[]> func) {
+            LoadAssetAsync<GameObject>(abName, new string[] { assetName }, func);
         }
 
-        public void LoadPrefab(string abName, string[] assetNames, Action<UObject[]> func) {
-            LoadAsset<GameObject>(abName, assetNames, func);
+        public void LoadPrefabAsync(string abName, string[] assetNames, Action<UObject[]> func)
+        {
+            LoadAssetAsync<GameObject>(abName, assetNames, func);
         }
 
-        public void LoadPrefab(string abName, string[] assetNames, LuaFunction func) {
-            LoadAsset<GameObject>(abName, assetNames, null, func);
+        public void LoadPrefabAsync(string abName, string[] assetNames, LuaFunction func)
+        {
+            LoadAssetAsync<GameObject>(abName, assetNames, null, func);
         }
 
         string GetRealAssetPath(string abName) {
@@ -78,7 +80,7 @@ namespace CocosFramework
         }
 
 
-        void LoadAsset<T>(string abName, string[] assetNames, Action<UObject[]> action = null, LuaFunction func = null) where T : UObject {
+        void LoadAssetAsync<T>(string abName, string[] assetNames, Action<UObject[]> action = null, LuaFunction func = null) where T : UObject {
             abName = GetRealAssetPath(abName);
 
             LoadAssetRequest request = new LoadAssetRequest();

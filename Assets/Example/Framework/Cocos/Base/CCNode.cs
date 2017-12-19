@@ -63,7 +63,7 @@ namespace CocosFramework
 	Camera:
 	- Each node has a camera. By default it points to the center of the CCNode.
 	*/
-    public class CCNode : CCObject, SelectorProtocol
+    public class CCNode : CCObject, SelectorProtocol, GameOjbect
     {
         static int kCCNodeTagInvalid = -1;
 

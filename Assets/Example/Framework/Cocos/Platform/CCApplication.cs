@@ -210,11 +210,6 @@ namespace CocosFramework
             // Windows doesn't have status bar.
             rect = new CCRect(0, 0, 0, 0);
         }
-
-        //static ccLanguageType CCApplication::getCurrentLanguage()
-        //{
-
-        //}
         
         bool m_bOrientationReverted;
         CCPoint m_tSizeInPoints;
@@ -224,7 +219,7 @@ namespace CocosFramework
             get { return true; }
         }
 
-        private CCSize _size = new CCSize(800, 480);
+        private CCSize _size = new CCSize(640, 960);
         public CCSize getSize()
         {
             return new CCSize(_size.width, _size.height);
