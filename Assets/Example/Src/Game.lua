@@ -254,10 +254,13 @@ function Word:updateView()
 			end
         elseif event.name == 'moved' then
         	if self:checkTouchWord(movePos) then
+        		self:removeWordMoveLine()
         		self:updateWordCanvas()
+        	else
+        		self:updateMoveLine()
         	end
 		elseif event.name == 'cancelled' or event.name == 'ended' then
-			
+			self:removeWordMoveLine()
 		end
 	end)
 end
@@ -321,6 +324,25 @@ function Word:updateWordCanvas()
 
 		draw_node:drawLine(startPos, endPos, cc.c3b("#ffffff"))
 		self._word_bg:addChild(draw_node)
+	end
+end
+
+function Word:updateMoveLine(movePos)
+	local count = table.nums(self._record_words)
+	local last_node = self._record_words[count]
+	local startPos = cc.p(math.cos(last_node.angle)*radius, math.sin(last_node.angle)*radius)
+	
+	local draw_node = self:getChildByName("movenode")
+	if not draw_node then
+		draw_node = ccui.DrawNode:create()
+	end
+	draw_node:drawLine(startPos, movePos,cc.c3b("#ffffff"))
+end
+
+function Word:removeWordMoveLine()
+	local draw_node = self:getChildByName("movenode")
+	if draw_node then
+		draw_node:removeFromParent()
 	end
 end
 
