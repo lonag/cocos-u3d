@@ -1,3 +1,66 @@
+int lua_cocos2dx_Image_setColorAt(lua_State* tolua_S)
+{
+	int argc = 0;
+	cocos2d::Image* cobj = nullptr;
+
+#if COCOS2D_DEBUG >= 1
+	tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+	if (!tolua_isusertype(tolua_S, 1, "cc.Image", 0, &tolua_err)) goto tolua_lerror;
+#endif
+
+	cobj = (cocos2d::Image*)tolua_tousertype(tolua_S, 1, 0);
+
+#if COCOS2D_DEBUG >= 1
+	if (!cobj)
+	{
+		tolua_error(tolua_S, "invalid 'cobj' in function 'lua_cocos2dx_Image_getColorAt'", nullptr);
+		return 0;
+	}
+#endif
+
+	argc = lua_gettop(tolua_S) - 1;
+	if (argc == 3)
+	{
+#if COCOS2D_DEBUG >= 1
+		int bitPerPixel = cobj->getBitPerPixel();
+		if (bitPerPixel != 32) {
+			tolua_error(tolua_S, "cc.Image:getColorAt ONLY work for Image 8888", nullptr);
+			return 0;
+		}
+#endif
+		lua_Integer px = lua_tointeger(tolua_S, 2);
+		lua_Integer py = lua_tointeger(tolua_S, 3);
+
+		Color4F color;
+		if (!luaval_to_color4f(tolua_S, 4, &color, "cc.Image:setColorAt"))
+		{
+			return 0;
+		}
+
+		unsigned char *data = cobj->getData();
+		cobj->getWidth();
+		uint32_t *pixel = (uint32_t *)data;
+		pixel[py * cobj->getWidth() + px] = color.r;
+		pixel[py * cobj->getWidth() + px + 1] = color.g;
+		pixel[py * cobj->getWidth() + px + 2] = color.b;
+		pixel[py * cobj->getWidth() + px + 3] = color.a;
+
+		return 1;
+	}
+	luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Image:getColorAt", argc, 2);
+	return 0;
+
+#if COCOS2D_DEBUG >= 1
+	tolua_lerror:
+				tolua_error(tolua_S, "#ferror in function 'lua_cocos2dx_Image_getColorAt'.", &tolua_err);
+#endif
+
+				return 0;
+}
+
 local DIR = {
 	VERTICAL = 1,
 	HORIZON = 2,
