@@ -27,7 +27,7 @@ function MainScene:createView()
     scrollView:setPosition(cc.p(display.size.width/2, display.height/2))
     scrollView:setTouchEnabled(true)
    
-    local scale = 20
+    local scale = 5
     local image = cc.Image:new()
     image:retain()
     image:initWithImageFile("jifen.png")
