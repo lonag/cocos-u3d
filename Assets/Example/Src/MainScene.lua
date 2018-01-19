@@ -9,6 +9,7 @@ function MainScene:ctor()
     self._scrollView = nil
     self._image = nil
     self._color_blocks = {}
+    self._colors = {}
 end
 
 function MainScene:onEnter()
@@ -27,10 +28,10 @@ function MainScene:createView()
     scrollView:setPosition(cc.p(display.size.width/2, display.height/2))
     scrollView:setTouchEnabled(true)
    
-    local scale = 5
+    local scale = 10
     local image = cc.Image:new()
     image:retain()
-    image:initWithImageFile("jifen.png")
+    image:initWithImageFile("00819-or8.png")
     local size = cc.size(image:getWidth(), image:getHeight())
 
     self._scale = scale
@@ -53,9 +54,8 @@ function MainScene:updateView()
     local size = self._size
     local image = self._image
     local scale = self._scale
-
     
-    local x, y = display.width/2 - size.width/2*scale, display.height/2 - size.height*scale/2
+    local x, y = display.width/2 - size.width/2*scale, display.height - size.height*scale/2
 
     local drawNode = self._scrollView:getChildByName("drawNode")
     if not drawNode then
@@ -71,22 +71,35 @@ function MainScene:updateView()
                 cc.p((i-1)*scale + x, j*scale + y),
                 cc.p(i*scale + x, j*scale + y),
                 cc.p(i*scale + x, (j-1)*scale + y),
-            }   
+            }  
+
             local color = image:getColorAt(i - 1, size.height - j)
             local gray = color.r*0.299 + color.g*0.587 + color.b*0.114
-            -- local gray = (r*299 + g*587 + b*114 + 500) / 1000
-            -- local gray = (r*30 + g*59 + b*11 + 50) / 100
-            local fillColor = cc.c4b(gray/255, gray/255, gray/255, color.a/255)
+            local fillColor = cc.c4b(gray/255, gray/255, gray/255, 255/255)
             if not (color.r == 0 and color.g == 0 and color.b == 0) then
                 if self._color_blocks[i] and self._color_blocks[i][j] then
                     drawNode:drawPolygon(points, 4, self._color_blocks[i][j], 0.5, cc.c4f(1, 1, 1, 0.2))
                 else
                     drawNode:drawPolygon(points, 4, fillColor, 0.5, cc.c4f(1, 1, 1, 0.2))
                 end
+                -- local label = display.newTTFLabel({text = i,size = scale/2})
+                -- display.align(label, display.CENTER, (i-0.5)*scale + x, (j-0.5)*scale + y)
+                -- self._scrollView:addChild(label)
             end
         end
     end
 
+end
+
+function MainScene:getColorIndex(color)
+    for i, v in pairs(self._colors) do
+        if v.r == color.r and v.g == color.g and v.b == color.b and v.a == color.a then
+            return table.nums(self._colors)
+        end
+    end
+
+    table.insert(self._colors, color)
+    return table.nums(self._colors)
 end
 
 function MainScene:checkBlock(point)
@@ -115,7 +128,131 @@ function MainScene:checkBlock(point)
 end
 
 function MainScene:onExit()
-
+    if self._image then
+        self._image:release()
+    end
 end
 
 return MainScene
+int lua_cocos2dx_Image_getColorAt(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Image* cobj = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Image",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    cobj = (cocos2d::Image*)tolua_tousertype(tolua_S,1,0);
+    
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Image_getColorAt'", nullptr);
+        return 0;
+    }
+#endif
+    
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+#if COCOS2D_DEBUG >= 1
+		int bitPerPixel = cobj->getBitPerPixel();
+        if (bitPerPixel != 32) {
+            //tolua_error(tolua_S,"cc.Image:getColorAt ONLY work for Image 8888", nullptr);
+            //return 0;
+        }
+#endif
+        lua_Integer px = lua_tointeger(tolua_S, 2);
+        lua_Integer py = lua_tointeger(tolua_S, 3);
+        unsigned char *data = cobj->getData();
+        cobj->getWidth();
+        /*uint32_t *pixel = (uint32_t *)data;
+        pixel += py * cobj->getWidth() + px;*/
+        
+        Color4B color;
+        color.r = data[(py * cobj->getWidth() + px) * 3];
+        color.g = data[(py * cobj->getWidth() + px) * 3 + 1]; //(*pixel >> 8) & 0xff;
+        color.b = data[(py * cobj->getWidth() + px) * 3 + 2]; //(*pixel >> 16) & 0xff;
+		//color.a = (*pixel >> 24) & 0xff;
+
+        color4b_to_luaval(tolua_S, color);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Image:getColorAt",argc, 2);
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Image_getColorAt'.",&tolua_err);
+#endif
+    
+    return 0;
+}
+
+int lua_cocos2dx_Image_setColorAt(lua_State* tolua_S)
+{
+	int argc = 0;
+	cocos2d::Image* cobj = nullptr;
+
+#if COCOS2D_DEBUG >= 1
+	tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+	if (!tolua_isusertype(tolua_S, 1, "cc.Image", 0, &tolua_err)) goto tolua_lerror;
+#endif
+
+	cobj = (cocos2d::Image*)tolua_tousertype(tolua_S, 1, 0);
+
+#if COCOS2D_DEBUG >= 1
+	if (!cobj)
+	{
+		tolua_error(tolua_S, "invalid 'cobj' in function 'lua_cocos2dx_Image_setColorAt'", nullptr);
+		return 0;
+	}
+#endif
+
+	argc = lua_gettop(tolua_S) - 1;
+	if (argc == 3)
+	{
+#if COCOS2D_DEBUG >= 1
+		int bitPerPixel = cobj->getBitPerPixel();
+		if (bitPerPixel != 32) {
+			tolua_error(tolua_S, "cc.Image:setColorAt ONLY work for Image 8888", nullptr);
+			return 0;
+		}
+#endif
+		lua_Integer px = lua_tointeger(tolua_S, 2);
+		lua_Integer py = lua_tointeger(tolua_S, 3);
+
+		Color4F color;
+		if (!luaval_to_color4f(tolua_S, 4, &color, "cc.Image:setColorAt"))
+		{
+			return 0;
+		}
+
+		unsigned char *data = cobj->getData();
+		cobj->getWidth();
+		uint32_t *pixel = (uint32_t *)data;
+		pixel[py * cobj->getWidth() + px] = color.r;
+		pixel[py * cobj->getWidth() + px + 1] = color.g;
+		pixel[py * cobj->getWidth() + px + 2] = color.b;
+		pixel[py * cobj->getWidth() + px + 3] = color.a;
+
+		return 1;
+	}
+	luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Image:setColorAt", argc, 2);
+	return 0;
+
+#if COCOS2D_DEBUG >= 1
+	tolua_lerror:
+				tolua_error(tolua_S, "#ferror in function 'lua_cocos2dx_Image_setColorAt'.", &tolua_err);
+#endif
+
+	return 0;
+}
