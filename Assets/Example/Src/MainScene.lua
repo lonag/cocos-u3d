@@ -1,4 +1,5 @@
 
+
 local MainScene = class("MainScene", function()
     return display.newScene("MainScene")
 end)
@@ -15,6 +16,7 @@ end
 function MainScene:onEnter()
     self:createView()
     self:updateView()
+    self:updateColorView()
 end
 
 function MainScene:createView()
@@ -28,10 +30,10 @@ function MainScene:createView()
     scrollView:setPosition(cc.p(display.size.width/2, display.height/2))
     scrollView:setTouchEnabled(true)
    
-    local scale = 10
+    local scale = 20
     local image = cc.Image:new()
     image:retain()
-    image:initWithImageFile("00819-or8.png")
+    image:initWithImageFile("00862-or8.png")
     local size = cc.size(image:getWidth(), image:getHeight())
 
     self._scale = scale
@@ -41,7 +43,7 @@ function MainScene:createView()
 
     scrollView:addTouchEventListener(function (sender, event)
         if event == ccui.TouchEventType.began then
-            self:checkBlock(cc.p(sender:getTouchBeganPosition()))
+            -- self:checkBlock(cc.p(sender:getTouchBeganPosition()))
         elseif event == ccui.TouchEventType.moved then
 
         elseif event == ccui.TouchEventType.ended or event == ccui.TouchEventType.canceled then
@@ -76,25 +78,59 @@ function MainScene:updateView()
             local color = image:getColorAt(i - 1, size.height - j)
             local gray = color.r*0.299 + color.g*0.587 + color.b*0.114
             local fillColor = cc.c4b(gray/255, gray/255, gray/255, 255/255)
-            if not (color.r == 0 and color.g == 0 and color.b == 0) then
+            if not (color.r == 255 and color.g == 255 and color.b == 255) then
                 if self._color_blocks[i] and self._color_blocks[i][j] then
                     drawNode:drawPolygon(points, 4, self._color_blocks[i][j], 0.5, cc.c4f(1, 1, 1, 0.2))
                 else
                     drawNode:drawPolygon(points, 4, fillColor, 0.5, cc.c4f(1, 1, 1, 0.2))
                 end
-                -- local label = display.newTTFLabel({text = i,size = scale/2})
-                -- display.align(label, display.CENTER, (i-0.5)*scale + x, (j-0.5)*scale + y)
-                -- self._scrollView:addChild(label)
+                local label = display.newTTFLabel({text = self:getColorIndex(color),size = scale/2})
+                display.align(label, display.CENTER, (i-0.5)*scale + x, (j-0.5)*scale + y)
+                self._scrollView:addChild(label)
             end
         end
     end
 
 end
 
+function MainScene:updateColorView()
+    local bottom = ccui.Layout:create()
+    bottom:setBackGroundColorType(1)
+    bottom:setBackGroundColor(cc.c3b(255, 255, 255))
+    bottom:setContentSize(cc.size(display.width, 100))
+    display.align(bottom, display.CENTER, display.width/2, 50)
+    self:addChild(bottom)
+
+    local scrollView = ccui.ScrollView:create()
+    self._scrollView = scrollView
+    self:addChild(scrollView)
+    scrollView:setDirection(ccui.ScrollViewDir.horizontal)
+    scrollView:setContentSize(cc.size(display.size.width, 50))
+    scrollView:setInnerContainerSize(cc.size(display.size.width*2, 50))
+    scrollView:setAnchorPoint(cc.p(0.5, 0.5))
+    scrollView:setPosition(cc.p(display.size.width/2, 50))
+    scrollView:setTouchEnabled(true)
+
+    for i, v in pairs(self._colors) do
+        local layout = ccui.Layout:create()
+        layout:setBackGroundColorType(1)
+        layout:setBackGroundColor(v)
+
+        layout:setContentSize(cc.size(50, 50))
+        display.align(layout, display.CENTER, i*60, 25)
+        scrollView:addChild(layout)
+
+        local label = display.newTTFLabel({text = i, size = 15})
+        display.align(label, display.CENTER, i*60, 25)
+        scrollView:addChild(label)
+    end
+
+end
+
 function MainScene:getColorIndex(color)
     for i, v in pairs(self._colors) do
-        if v.r == color.r and v.g == color.g and v.b == color.b and v.a == color.a then
-            return table.nums(self._colors)
+        if v.r == color.r and v.g == color.g and v.b == color.b then
+            return i
         end
     end
 
@@ -134,6 +170,7 @@ function MainScene:onExit()
 end
 
 return MainScene
+
 int lua_cocos2dx_Image_getColorAt(lua_State* tolua_S)
 {
     int argc = 0;
